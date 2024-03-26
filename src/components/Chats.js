@@ -4,7 +4,7 @@ import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import socketIo from "socket.io-client";
 import Message from "./Message";
-import ReactScrollToBottom from 'react-scroll-to-bottom';
+import ReactScrollToBottom, { useScrollTo } from 'react-scroll-to-bottom';
 
 const Chats = () => {
   const [ispickervisible, setPickervisible] = useState(false);
@@ -14,12 +14,17 @@ const Chats = () => {
   const [messages,setmessages] = useState([]);
   const inputRef = useRef(null);
   const emojiSelectorRef = useRef(null);
+  const [socket,setSocket] = useState(null);
 
   // const socket = socketIo(ENDPOINT,{transports:['websocket']});
   // useEffect(()=>{
-  //   socket.on('connect',()=>{
-  //     alert('connected');
-  //   });
+  //   const newSocket = io("http://localhost:8080");
+  //   setSocket(newSocket);
+
+  //   return ()=>{
+  //     newSocket.disconnect();
+  //   }
+  // },[10]);
 
   //   socket.emit('joined',{})
   //   return()=>{

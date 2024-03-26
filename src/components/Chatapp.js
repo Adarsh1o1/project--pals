@@ -11,16 +11,16 @@ const Chatapp = () => {
     navigate('/')
 }
   return (
-    <div className='chats' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column',height:'100vh',textAlign:'center'}}>
-      <h1>Will be available soon</h1>
-      <Link to='/'>
-      <button type="submit" onClick={logout} className="error-submit">Go Back</button>
-      </Link>
-      {/* <div className="chat-container">
-        <Messanger/>
-        <Chats/>
-      </div> */}
-    </div>
+    // <div className='chats' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column',height:'100vh',textAlign:'center'}}>
+    //   <h1>Will be available soon</h1>
+    //   <Link to='/'>
+    //   <button type="submit" onClick={logout} className="error-submit">Go Back</button>
+    //   </Link>
+    // </div>
+    <div className="chat-container">
+      <Messanger/>
+      <Chats/>
+    </div> 
   )
 }
 

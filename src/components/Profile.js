@@ -16,8 +16,8 @@ const Profile = (props) => {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     let json = await response.json();
-    // console.log(json)
     setposts(json);
+    
   }
 
   const searched_name = sessionStorage.getItem('username')
@@ -49,7 +49,7 @@ const Profile = (props) => {
 
   const clicked = async() =>{
 
-    const emails = posts.email;
+    const emails = search.email;
 
     let response = await fetch('http://adarsh826.pythonanywhere.com/api/core/connect/', {
         method: 'POST',
@@ -59,7 +59,7 @@ const Profile = (props) => {
         })
       });
       let json = await response.json();
-      console.log(json);
+      // console.log(json);
     props.showalert('Email has been sent', 'success');
     
     // navigate("/message")
