@@ -11,7 +11,7 @@ const Otp = (props) => {
   }
 
   const otpdata = async () => {
-    let response = await fetch('https://adarsh826.pythonanywhere.com/api/accounts/verify-otp/', {
+    let response = await fetch('http://127.0.0.1:8000/api/accounts/verify-otp/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: sessionStorage.getItem('email'), otp: otp })

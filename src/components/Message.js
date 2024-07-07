@@ -1,19 +1,13 @@
 import React from 'react'
 import './style/Message.css'
 
-const Message = ({message}) => {
+const Message = ({message,position}) => {
     const words = message.split(' ');
     const slicedMessage = words.slice(0, 10).join(' ');
     const remainingWords = words.slice(10).join(' ');
   return (<>
-    <div className='message-box left'>
+    <div className={"message-box ${position}" }>
       {/* {message} */}
-      <div>{slicedMessage}</div>
-      {remainingWords && <div>{remainingWords}</div>}
-    </div>
-    <div className='message-box right'>
-      {/* {message} */}
-
       <div>{slicedMessage}</div>
       {remainingWords && <div>{remainingWords}</div>}
     </div>

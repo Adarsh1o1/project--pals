@@ -16,7 +16,7 @@ const Form = (props) => {
         try {
             e.preventDefault();
 
-            let response = await fetch('https://adarsh826.pythonanywhere.com/api/accounts/register/', {
+            let response = await fetch('http://127.0.0.1:8000/api/accounts/register/', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

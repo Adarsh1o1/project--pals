@@ -19,7 +19,7 @@ const Loginform = (props) => {
         e.preventDefault();
         sessionStorage.removeItem('token');
         try {
-            let response = await fetch('https://adarsh826.pythonanywhere.com/api/accounts/login/', {
+            let response = await fetch('http://127.0.0.1:8000/api/accounts/login/', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

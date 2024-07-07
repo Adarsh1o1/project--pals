@@ -9,7 +9,7 @@ const Postitem = ({ post, showalert }) => {
   const clicked = async () => {
     const emails = post.email;
 
-    let response = await fetch('http://adarsh826.pythonanywhere.com/api/core/connect/', {
+    let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

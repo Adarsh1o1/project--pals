@@ -11,7 +11,7 @@ const Profile = (props) => {
   const [search, setsearch] = useState(initialsearched);
   const token = sessionStorage.getItem('token');
   const fetchallposts = async () => {
-    let response = await fetch('http://adarsh826.pythonanywhere.com/api/core/user-posts/', {
+    let response = await fetch('http://127.0.0.1:8000/api/core/user-posts/', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -23,7 +23,7 @@ const Profile = (props) => {
   const searched_name = sessionStorage.getItem('username')
 
   const fetchalldata = async () => {
-    let response = await fetch(`http://adarsh826.pythonanywhere.com/api/accounts/search/${searched_name}`, {
+    let response = await fetch(`http://127.0.0.1:8000/api/accounts/search/${searched_name}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -51,7 +51,7 @@ const Profile = (props) => {
 
     const emails = search.email;
 
-    let response = await fetch('http://adarsh826.pythonanywhere.com/api/core/connect/', {
+    let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
         body: JSON.stringify({

@@ -25,7 +25,7 @@ const Navbar = () => {
             try {
                 setLoading(true);
 
-                const response = await fetch(`http://adarsh826.pythonanywhere.com/api/accounts/search/${searchTerm}`, {
+                const response = await fetch(`http://127.0.0.1:8000/api/accounts/search/${searchTerm}`, {
                     method: 'GET',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
