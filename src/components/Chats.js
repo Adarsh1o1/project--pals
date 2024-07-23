@@ -6,90 +6,70 @@ import Message from "./Message";
 import ReactScrollToBottom from 'react-scroll-to-bottom';
 
 const Chats = () => {
-  const [ispickervisible, setPickervisible] = useState(false);
-  const [selectedEmojis, setSelectedEmojis] = useState([]);
+  const [isPickerVisible, setPickerVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const inputRef = useRef(null);
   const emojiSelectorRef = useRef(null);
   const chatSocket = useRef(null);
-  const [position, setPosition] = useState('left')
+  
+  const token = sessionStorage.getItem('token');
+  const username = sessionStorage.getItem('username');
+
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
     chatSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/testing/?token=${token}`);
 
-    if (chatSocket.current) {
-      chatSocket.current.onopen = function () {
-        console.log('WebSocket connected');
-      };
+    const handleOpen = () => console.log('WebSocket connected');
+    const handleMessage = (e) => {
+      const data = JSON.parse(e.data);
+      const position = data.username !== username ? 'left' : 'right';
+      setMessages(prevMessages => [...prevMessages, { message: data.message, position }]);
+    };
+    const handleClose = () => console.log('WebSocket closed');
+    const handleError = (error) => console.error('WebSocket error:', error);
 
-      chatSocket.current.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-        setMessages(prevMessages => [...prevMessages, { message: data.message, position: "left" }]);
-        // setPosition("left")
-      };
-
-      chatSocket.current.onclose = function () {
-        console.log('WebSocket closed');
-      };
-
-      chatSocket.current.onerror = function (error) {
-        console.error('WebSocket error:', error);
-      };
-    }
+    chatSocket.current.addEventListener('open', handleOpen);
+    chatSocket.current.addEventListener('message', handleMessage);
+    chatSocket.current.addEventListener('close', handleClose);
+    chatSocket.current.addEventListener('error', handleError);
 
     return () => {
-      if (chatSocket.current) {
-        chatSocket.current.close(); // Close WebSocket connection on component unmount
-      }
+      chatSocket.current.removeEventListener('open', handleOpen);
+      chatSocket.current.removeEventListener('message', handleMessage);
+      chatSocket.current.removeEventListener('close', handleClose);
+      chatSocket.current.removeEventListener('error', handleError);
+      chatSocket.current.close();
     };
-  }, []);
+  }, [token, username]);
 
-  const inputtextvalue = (e) => {
-    setMessage(e.target.value);
+  const handleInputChange = (e) => setMessage(e.target.value);
 
-  }
+  const handleEmojiSelect = (emoji) => setMessage(prevMessage => prevMessage + emoji.native);
 
-  const handleEmojiSelect = (e) => {
-    const selectedEmoji = e.native;
-    setSelectedEmojis(prevEmojis => [...prevEmojis, selectedEmoji]);
-    setMessage(prevMessage => prevMessage + selectedEmoji);
-  }
-
-  const handleEmojiButtonClick = (e) => {
+  const toggleEmojiPicker = (e) => {
     e.preventDefault();
-    setPickervisible(!ispickervisible);
-  }
+    setPickerVisible(!isPickerVisible);
+  };
 
   const handleOutsideClick = (event) => {
-    if (emojiSelectorRef.current && !emojiSelectorRef.current.contains(event.target) && !event.target.classList.contains('emojibutton')) {
-      setPickervisible(false);
+    if (emojiSelectorRef.current && !emojiSelectorRef.current.contains(event.target) && !event.target.classList.contains('emoji-button')) {
+      setPickerVisible(false);
     }
-  }
+  };
 
-  const sendmessage = () => {
-    const username = sessionStorage.getItem('username')
+  const sendMessage = () => {
     if (chatSocket.current && chatSocket.current.readyState === WebSocket.OPEN) {
-      chatSocket.current.send(JSON.stringify({
-        'message': message, 'username':username
-      }));
+      chatSocket.current.send(JSON.stringify({ message, username }));
       setMessage('');
-      setMessages(prevMessage => [...prevMessage, { message, position: 'right' }])
-      // setPosition('right')
-      setSelectedEmojis([]);
     } else {
       console.error('WebSocket is not open.');
     }
-    // setPosition(prevpos=>prevpos==='right'?'left':'right');
-  }
+  };
 
   useEffect(() => {
     document.addEventListener('click', handleOutsideClick);
-    return () => {
-      document.removeEventListener('click', handleOutsideClick);
-    };
-  }, [ispickervisible]);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
 
   const useKeyPress = (key, callback) => {
     useEffect(() => {
@@ -99,18 +79,14 @@ const Chats = () => {
           callback();
         }
       };
-
-      // setPosition(prevPosition => prevPosition === 'right' ? 'left' : 'right');
+      
       document.addEventListener('keydown', handleKeyPress);
-
-      return () => {
-        document.removeEventListener('keydown', handleKeyPress);
-        // setPosition('left');
-      };
+      return () => document.removeEventListener('keydown', handleKeyPress);
     }, [key, callback]);
   };
 
-  useKeyPress('Enter', sendmessage);
+  useKeyPress('Enter', sendMessage);
+
   return (
     <div className="chats">
       <div className="chats-container">
@@ -119,19 +95,18 @@ const Chats = () => {
           {messages.map((item, i) => (
             <Message key={i} message={item.message} position={item.position} />
           ))}
-          <div className="emoji-selector" style={ispickervisible ? { display: 'block', width: 'fit-content', height: 'fit-content', bottom: '0px', position: 'absolute', zIndex: '1000000' } : { display: 'none' }} ref={emojiSelectorRef}>
-            <Picker data={data} previewPostion='bottom' onEmojiSelect={handleEmojiSelect} emojiSize={24} />
+          <div className="emoji-selector" style={isPickerVisible ? { display: 'block' } : { display: 'none' }} ref={emojiSelectorRef}>
+            <Picker data={data} onEmojiSelect={handleEmojiSelect} emojiSize={24} />
           </div>
         </ReactScrollToBottom>
         <div className="chat-input">
-          <button className="emojibutton" onClick={handleEmojiButtonClick}>emoji</button>
-          <input className="input-text" onChange={inputtextvalue} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." type="text" />
-          <button className="send-message" onClick={sendmessage}>send</button>
+          <button className="emoji-button" onClick={toggleEmojiPicker}>emoji</button>
+          <input className="input-text" onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." type="text" />
+          <button className="send-message" onClick={sendMessage}>send</button>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
-  
-}
+};
 
 export default Chats;

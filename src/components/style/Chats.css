@@ -4,7 +4,7 @@
 }
 
 .chats-container{
-    max-height: fit-content;
+    /* max-height: fit-content; */
     min-height: 98vh;
     min-width: 78vw;
     background-color: #5ea3c9;
@@ -27,7 +27,7 @@
 }
 
 .chat-box{
-    height: 519px;
+    height: 81.5vh;
     position: relative;
     overflow-y: auto;
     overflow-x: auto;

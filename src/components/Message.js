@@ -6,7 +6,7 @@ const Message = ({message,position}) => {
     const slicedMessage = words.slice(0, 10).join(' ');
     const remainingWords = words.slice(10).join(' ');
   return (<>
-    <div className={"message-box ${position}" }>
+    <div className={`message-box ${position}` }>
       {/* {message} */}
       <div>{slicedMessage}</div>
       {remainingWords && <div>{remainingWords}</div>}
