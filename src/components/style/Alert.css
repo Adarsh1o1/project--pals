@@ -8,7 +8,9 @@
     padding: 7px;
     width: 99vw;
     height: 26px;
+    /* margin-bottom: 5px; */
     background-color: lightgreen;
     color: black;
     overflow: hidden;
+    text-align: center;
 }

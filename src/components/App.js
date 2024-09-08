@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import Signup from './Signup';
 import Login from './Login';
 import './style/App.css';
-import { Routes, Route, useLocation} from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate} from 'react-router-dom';
 import Post from './Post';
 import Alert from './Alert';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,9 @@ import About from './About';
 
 function App() {
   const[alert,setalert] = useState(null);
-  
+  const token = sessionStorage.getItem('token');
+  let navigate = useNavigate();
+  const location =  useLocation();
   const showalert = (message,type) =>{
     setalert({
       msg:message,
@@ -26,8 +28,19 @@ function App() {
     },1500)
   }
 
-  const [loading, setLoading] = useState(true);
+  const sendBack = () =>{
+    if(token && (location.pathname==="/login" || location.pathname==="/signup")){
+      
+      navigate('/post')
+      
+    }
+    
+  }
 
+  const [loading, setLoading] = useState(true);
+ useEffect(()=>{
+  sendBack()
+ },[location, navigate, token])
 
   useEffect(() => {
     const delay = 1000; // 1 second
@@ -39,7 +52,19 @@ function App() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const location =  useLocation();
+  useEffect(() => {
+    const unblock = navigate((nextLocation, action) => {
+      if (token && (nextLocation.pathname === '/login' || nextLocation.pathname === '/signup')) {
+        navigate('/post');
+        return false; // Block navigation
+      }
+    });
+
+    return () => {
+      if (unblock) unblock(); // Clean up on unmount
+    };
+  }, [navigate, token]);
+
 
   return (
 
@@ -62,7 +87,7 @@ function App() {
           <Route exact path='/signup' element={<Signup />} />
           <Route exact path='/login' element={<Login />} />
           
-          <Route exact path='/user-profile' element={<Profile/>} />
+          <Route exact path='/user-profile' element={<Profile showalert={showalert}/>} />
           <Route exact path='/post' element={<Post showalert={showalert} />} />
           <Route exact path='/message' element={<Chatapp />} />
         </Routes>

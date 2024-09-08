@@ -11,6 +11,7 @@
     /* max-width: 60vw;
     min-width: 60vw; */
     border: 1px solid lightgrey;
+    border-radius: 10px;
     /* border-right: none; */
 }
 
@@ -42,6 +43,15 @@
     margin-bottom: 5px;
 }
 
+#Category{
+    /* color: #01456d; */
+    color: black;
+    
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+
 #Description{
     /* color:#015B8E; */
     color: black;
@@ -52,7 +62,15 @@
     display: flex;
     align-items: center;
     font-size: 25px;
+}
 
+#post_time{
+    text-align: right;
+    text-decoration: none;
+    color: #0a0a0a;
+    font-size: 16px;
+    font-weight: normal;
+    margin-left: 24px;
 }
 
 .connect-button button{
@@ -77,7 +95,11 @@
     border-radius: 50%;
 }
 
-#name:hover{
+.post-username:hover{
     text-decoration: underline;
     cursor: pointer;
+}
+
+#post_time:hover{
+    text-decoration: none;
 }

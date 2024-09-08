@@ -3,7 +3,9 @@ import './style/Home.css'
 import { Link } from 'react-router-dom'
 import idea from './style/home-page-idea1.png.jpg'
 const Home = () => {
+  const token = sessionStorage.getItem('token');
   return (
+    
     <>
     <br />
     <br />
@@ -25,7 +27,7 @@ const Home = () => {
             </li>
             <br />
             <li>
-              <Link className='getstarted' to={'/signup'}><button style={{cursor:'pointer'}}>Get Started</button></Link>
+              <Link className='getstarted' to={'/signup'}><button style={{cursor:'pointer'}} disabled={token? true : false}>Get Started</button></Link>
             </li>
           </ul>
         </div>

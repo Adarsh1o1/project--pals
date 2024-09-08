@@ -116,6 +116,7 @@
     height: 100%;
     /* overflow: hidden; */
     border: 1px solid lightgrey;
+    border-radius: 10px;
     /* position:fixed; */
     /* right: 2px; */
     display: flex;
@@ -237,6 +238,6 @@
 
 .post-second-container{
     height: 100%;
-    max-height: 72.5vh;
-    min-height: 72.5vh;
+    max-height: 72vh;
+    min-height: 72vh;
 }

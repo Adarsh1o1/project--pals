@@ -26,36 +26,19 @@ const Navbar = () => {
         if (searchTerm.trim() !== "") {
             sessionStorage.setItem('category', searchTerm);
             setResult(true);
-            
+            window.location.reload();
         }
 
         else {
             // Optionally, you could provide some feedback to the user here
             console.log("Search term is empty. Cannot perform search.");
         }
-        if(location.pathname!=="/post"){
-            navigate('/post');
+        if(location.pathname!=='/post'){
+            navigate('/post')
             window.location.reload();
-          }
-          window.location.reload();
-    };
-    
-    const useKeyPress = (key, callback) => {
-        useEffect(() => {
-          const handleKeyPress = (e) => {
-            if (e.key === key) {
-              e.preventDefault();
-              callback();
-            }
-          };
-          
-          document.addEventListener('keydown', handleKeyPress);
-          return () => document.removeEventListener('keydown', handleKeyPress);
-        }, [key, callback]);
-    };
+        }
 
-    useKeyPress('Enter', handleClick1);
-
+    };
     const handleClick2 = () => {
         sessionStorage.removeItem('category');
         setSearchTerm(''); // Clear the search input
@@ -83,6 +66,11 @@ const Navbar = () => {
                                 id='search-input'
                                 placeholder='Filter out your project category... '
                                 value={searchTerm}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleClick1(); // Trigger the search when Enter is pressed
+                                    }
+                                }}
                                 onChange={handleSearch}
                             />
 <img

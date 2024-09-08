@@ -32,6 +32,8 @@ const Postitem = ({ post, showalert }) => {
   // },[])
   const clicked = async () => {
     const emails = post.email;
+    sessionStorage.setItem('username1',post?.username);
+    sessionStorage.getItem('username1')
 
     let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
       method: 'POST',
@@ -43,11 +45,12 @@ const Postitem = ({ post, showalert }) => {
         email: emails,
       }),
     });
-
+    showalert(`Your email has been sent to @${username1}`, 'success');
     let json = await response.json();
     console.log(json);
 
-    showalert('Email has been sent', 'success');
+
+
     // navigate("/message")
   };
 
@@ -58,15 +61,19 @@ const Postitem = ({ post, showalert }) => {
         <div className="postitem-subfirst-container" >
 
         <ul>
-            <li id='name' onClick={handleUsernameClick}>@{post?.username}</li>
+            <li id='name' ><div className='post-username' onClick={handleUsernameClick}>@{post?.username}</div><div id='post_time'> Updated {post?.time_since_posted}</div></li>
+            
             <li className='connect-button'><button onClick={clicked}>Connect</button></li>
           </ul>
         </div>
 
         <div className="postitem-subsecond-container">
           <ul>
-            <li id='Title'>{post?.title}</li>
+            
+            <li id='Title'>Need: {post?.title}</li>
+            <li id='Category'>Category: {post?.category}</li>
             <li id='Description'>{post?.description}</li>
+            
           </ul>
         </div>
         </div>

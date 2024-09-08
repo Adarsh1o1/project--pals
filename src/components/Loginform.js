@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './style/Loginform.css'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ const Loginform = (props) => {
     }
 
     const datasend = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault(); // Check if `e` exists, and then call preventDefault
         sessionStorage.removeItem('token');
         try {
             let response = await fetch('http://127.0.0.1:8000/api/accounts/login/', {
@@ -25,30 +25,26 @@ const Loginform = (props) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    email: credstate.email
-                    , password: credstate.password
+                    email: credstate.email,
+                    password: credstate.password
                 })
-            })
-            // console.log(credstate.email);
+            });
             let data = await response.json();
-            // console.log(data);
-            // props.onSubmit();
-            if(!data.errors){
-
+            console.log(data);
+    
+            if (!data.errors) {
                 sessionStorage.setItem('token', data.token.access);
-                // sessionStorage.setItem('msg', data.msg);
                 sessionStorage.setItem('username', data.username);
-                navigate('/post');
                 sessionStorage.setItem('email', credstate.email);
-            }
-            else{
+                navigate('/post');
+            } else {
                 alert('Recheck your email and password');
             }
         } catch (error) {
             console.log(error.message);
         }
     }
-
+    
     return (
         <div>
             <div className="loginform-main-container">
@@ -58,7 +54,7 @@ const Loginform = (props) => {
                         <input type="text" name='email' className="email" onChange={changed} placeholder='Email' />
                         <input type="password" name='password' className="password" onChange={changed} placeholder='Password' />
 
-                        <button type="submit" className="loginform-submit">Next</button>
+                        <button className="loginform-submit">Next</button>
                         <div className="refer">
                         <Link id='refer' to="/signup">
                             <div className="link">

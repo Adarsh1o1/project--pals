@@ -6,5 +6,6 @@
     /* max-width: 60vw;
     min-width: 60vw; */
     border: 1px solid lightgrey;
+    border-radius: 10px;
     /* border-right: none; */
 }

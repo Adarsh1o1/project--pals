@@ -16,7 +16,7 @@ const Profile = (props) => {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     let json = await response.json();
-    console.log(json)
+    // console.log(json)
     setposts(json.payload);
     
   }
@@ -29,7 +29,7 @@ const Profile = (props) => {
       headers: { 'Authorization':`Bearer ${token}` }
     });
     let json = await response.json();
-    // console.log(json[0])
+    console.log("json:",json)
     setsearch(json);
     
   }
@@ -44,13 +44,14 @@ const Profile = (props) => {
     }
     fetchalldata();
     fetchallposts();
-    console.log(search);
+    // console.log(search);
 
   }, [])
 
   const clicked = async() =>{
 
-    const emails = search.email;
+    const emails = sessionStorage.getItem('email');
+    console.log(emails);
 
     let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
         method: 'POST',
@@ -70,8 +71,9 @@ const Profile = (props) => {
     <div className='profile-main-container'>
       {Array.isArray(search) ? (search.map((element)=>(
       <div className="profile-first-container" key={element.id}>
+        <div className='image-name'>
         <div className="account-image">
-          
+          <img src={element.image} />
         </div>
         <div className="profile-details">
           <ul>
@@ -79,15 +81,17 @@ const Profile = (props) => {
               <h1>{element.full_name}</h1>
             </li>
             <li>
-              <h3>{element.username}</h3>
+              <h3>@{element.username}</h3>
             </li>
             <li className='connect-button'>
               <button onClick={clicked}>Connect</button>
             </li>
           </ul>
         </div>
+        </div>
+
         <div className="profile-biodetails">
-          <div className="profile-collegename">
+          {/* <div className="profile-collegename">
             <ul>
               <li>
                 <div className="circle"></div>
@@ -96,15 +100,15 @@ const Profile = (props) => {
                 Dronacharya College of Engineering
               </li>
             </ul>
-          </div>
+          </div> */}
           <h4>About</h4>
           <div className="profile-bio">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quaerat quasi minima nisi aliquid animi blanditiis nesciunt esse ea, culpa cumque, atque ex nihil labore.
+            {element.bio}
           </div>
         </div>
       </div>))):('')}
-      <h2 id='POSTS'>Posts:</h2>
-      <div className="post-secondmain-container">
+      {/* <h2 id='POSTS'>Posts:</h2> */}
+      <div className="profile-secondmain-container">
         <div className="all-posts">
           {Array.isArray(posts) && posts.length > 0 ? (
             posts.map((element) => (
