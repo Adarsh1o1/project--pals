@@ -4,8 +4,8 @@
 }
 
 .messanger-main-container{
-    /* min-height: 630px; */
-    min-height: 98vh;
+    max-height: 100vh;
+    min-height: 100vh;
     min-width: 22vw;
     background-color: white;
     border-radius: 15px;

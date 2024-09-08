@@ -102,20 +102,19 @@
     cursor: pointer;
 }
 
-.search-modal{
+ /* .search-modal{
     width: fit-content;
     position:absolute;
     /* left: 18.5%; */
     /* top:61%; */
-    transform: translate(320px,-10px);
-    z-index:1000;
-    max-height: 250px;
+
+  /*  max-height: 250px;
     overflow-x: hidden;
     overflow-y: auto;
     border-radius: 15px;
 
     background-color: rgb(241, 244, 245);
-}
+}  */
 
 .nav-first-container ul li{
     margin-right: 1.1vw;

@@ -11,21 +11,22 @@ const Profile = (props) => {
   const [search, setsearch] = useState(initialsearched);
   const token = sessionStorage.getItem('token');
   const fetchallposts = async () => {
-    let response = await fetch('http://127.0.0.1:8000/api/core/user-posts/', {
+    let response = await fetch(`http://127.0.0.1:8000/api/core/any-user-post/${searched_name}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
     let json = await response.json();
-    setposts(json);
+    console.log(json)
+    setposts(json.payload);
     
   }
 
-  const searched_name = sessionStorage.getItem('username')
+  const searched_name = sessionStorage.getItem('username1')
 
   const fetchalldata = async () => {
     let response = await fetch(`http://127.0.0.1:8000/api/accounts/search/${searched_name}`, {
       method: 'GET',
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization':`Bearer ${token}` }
     });
     let json = await response.json();
     // console.log(json[0])
@@ -38,14 +39,14 @@ const Profile = (props) => {
 
   useEffect(() => {
 
-    if (sessionStorage.getItem('msg') !== "login success") {
+    if (sessionStorage.getItem('token') !== token || !token) {
       return navigate('/login');
     }
     fetchalldata();
     fetchallposts();
     console.log(search);
 
-  }, [search])
+  }, [])
 
   const clicked = async() =>{
 

@@ -20,7 +20,7 @@ const Otp = (props) => {
     let datarecieved = await response.json();
     console.log(datarecieved.msg)
     if(datarecieved.msg === 'email verified'){
-      navigate('/post')
+      navigate('/login')
     }
   }
 

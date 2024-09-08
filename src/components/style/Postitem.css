@@ -52,6 +52,7 @@
     display: flex;
     align-items: center;
     font-size: 25px;
+
 }
 
 .connect-button button{
@@ -74,4 +75,9 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
+}
+
+#name:hover{
+    text-decoration: underline;
+    cursor: pointer;
 }

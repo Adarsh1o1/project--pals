@@ -36,7 +36,7 @@ const Loginform = (props) => {
             if(!data.errors){
 
                 sessionStorage.setItem('token', data.token.access);
-                sessionStorage.setItem('msg', data.msg);
+                // sessionStorage.setItem('msg', data.msg);
                 sessionStorage.setItem('username', data.username);
                 navigate('/post');
                 sessionStorage.setItem('email', credstate.email);

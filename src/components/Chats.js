@@ -58,7 +58,7 @@ const Chats = () => {
   };
 
   const sendMessage = () => {
-    if (chatSocket.current && chatSocket.current.readyState === WebSocket.OPEN) {
+    if (chatSocket.current && chatSocket.current.readyState === WebSocket.OPEN && message !== "") {
       chatSocket.current.send(JSON.stringify({ message, username }));
       setMessage('');
     } else {
@@ -95,7 +95,7 @@ const Chats = () => {
           {messages.map((item, i) => (
             <Message key={i} message={item.message} position={item.position} />
           ))}
-          <div className="emoji-selector" style={isPickerVisible ? { display: 'block' } : { display: 'none' }} ref={emojiSelectorRef}>
+    <div className="emoji-selector" style={isPickerVisible ? { display: 'block',transform:'translateY(100%)'} : { display: 'none' }} ref={emojiSelectorRef}>
             <Picker data={data} onEmojiSelect={handleEmojiSelect} emojiSize={24} />
           </div>
         </ReactScrollToBottom>

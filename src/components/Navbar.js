@@ -1,72 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import style from './style/Navbar.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import realimage from './style/PartnurUp.png';
 import searchbtn from './style/search-interface-symbol.png';
 import { Link } from 'react-router-dom';
-import Searchmodal from './Searchmodal';
 
 const Navbar = () => {
     let navigate = useNavigate();
-    const logout = () => {
-        sessionStorage.clear();
-        navigate('/');
-    };
+    const location = useLocation();
+    const [searchTerm, setSearchTerm] = useState(sessionStorage.getItem('category') || '');
+    const [Result, setResult] = useState(sessionStorage.getItem('Result') === 'true'); // Retrieve Result state
 
-    let location = useLocation();
-    const [modalResult, setModalResult] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [loading, setLoading] = useState(false);
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-
-                const response = await fetch(`http://127.0.0.1:8000/api/accounts/search/${searchTerm}`, {
-                    method: 'GET',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await response.json();
-
-                if (Array.isArray(data) && data.length > 0) {
-                    setSearchResults(data);
-                    console.log(data)
-                    setModalResult(true);
-                } else {
-                    setSearchResults([]);
-                    setModalResult(false);
-                }
-
-                if(setModalResult){
-                    window.addEventListener('click',()=>{
-                        setModalResult(false);
-                    })
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (searchTerm.trim() !== '') {
-            fetchData();
-            // console.log(fetchData());
-        } else {
-            setSearchResults([]);
-            setModalResult(false);
-        }
-    }, [searchTerm, token]);
+        // Store Result in sessionStorage
+        sessionStorage.setItem('Result', Result);
+    }, [Result]);
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     };
 
+    const handleClick1 = () => {
+        if (searchTerm.trim() !== "") {
+            sessionStorage.setItem('category', searchTerm);
+            setResult(true);
+            
+        }
+
+        else {
+            // Optionally, you could provide some feedback to the user here
+            console.log("Search term is empty. Cannot perform search.");
+        }
+        if(location.pathname!=="/post"){
+            navigate('/post');
+            window.location.reload();
+          }
+          window.location.reload();
+    };
+    
+    const useKeyPress = (key, callback) => {
+        useEffect(() => {
+          const handleKeyPress = (e) => {
+            if (e.key === key) {
+              e.preventDefault();
+              callback();
+            }
+          };
+          
+          document.addEventListener('keydown', handleKeyPress);
+          return () => document.removeEventListener('keydown', handleKeyPress);
+        }, [key, callback]);
+    };
+
+    useKeyPress('Enter', handleClick1);
+
+    const handleClick2 = () => {
+        sessionStorage.removeItem('category');
+        setSearchTerm(''); // Clear the search input
+        setResult(false);
+        window.location.reload();
+    };
+
+    const logout = () => {
+        sessionStorage.clear();
+        navigate('/');
+    };
+
     return (
-        <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' ? style : { display: 'none' }} >
+        <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' ? style : { display: 'none' }}>
             <div className="nav-first-container">
                 <ul>
                     <img src={realimage} id='nav-logo' width={'50vw'} alt="an 3d art view" />
@@ -75,22 +78,40 @@ const Navbar = () => {
                     </li>
                     <li>
                         <div className="nav-search">
-                            <input type="text" placeholder='Search... ' value={searchTerm} onChange={handleSearch}/>
-                            <img src={searchbtn} alt="button for searching" />
+                            <input
+                                type="text"
+                                id='search-input'
+                                placeholder='Filter out your project category... '
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+<img
+    src={searchbtn}
+    alt="button for searching"
+    style={{
+        display: Result ? "none" : "block",
+        cursor: searchTerm.trim() === "" ? "not-allowed" : "pointer",
+        opacity: searchTerm.trim() === "" ? 0.5 : 1
+    }}
+    onClick={searchTerm.trim() !== "" ? handleClick1 : null}
+/>
+
+                            <button
+                                style={Result ? { display: "block" } : { display: "none" }}
+                                onClick={handleClick2}
+                            >
+                                x
+                            </button>
                         </div>
                     </li>
-                    <li>
-
-                    </li>
-                    
-                    
-                    <li className= 'nav-list'>
+                    <li></li>
+                    <li className='nav-list'>
                         <Link to={'/aboutus'}>About us</Link>
                     </li>
-                    <li className= 'nav-list'>
+                    <li className='nav-list'>
                         <Link to={'/post'}>Posts</Link>
                     </li>
-                    <li className= 'nav-list'>
+                    <li className='nav-list'>
                         <Link to={'/message'}>Messages</Link>
                     </li>
                     <li id='options'>
@@ -100,32 +121,25 @@ const Navbar = () => {
                         <div className='signup-button'>
                             <ul>
                                 <li className="nav-signup ">
-                                    <Link to={'/signup'}><button className='nav-signup'>Sign Up</button></Link>
+                                    <Link to={'/signup'}>
+                                        <button className='nav-signup'>Sign Up</button>
+                                    </Link>
                                 </li>
                                 <li className="nav-signup">
-                                    <Link to={'/login'}><button className='nav-signup'>Login</button></Link>
+                                    <Link to={'/login'}>
+                                        <button className='nav-signup'>Login</button>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
                     ) : (
                         <ul>
-                        {/*<li className='your-account'>
-                            Your account
-                            {/* <div className='circle'></div> */}
-                        {/*</li>*/}
-                        <li className='nav-signup'><button className='nav-signup' onClick={logout}>Logout</button></li>
+                            <li className='nav-signup'>
+                                <button className='nav-signup' onClick={logout}>Logout</button>
+                            </li>
                         </ul>
-
                     )}
-                   
-
                 </ul>
-            </div>
-            <div className="search-modal">
-            {searchResults.length > 0 && searchResults.map((element) => (
-        <Searchmodal key={element.id} modalResult={modalResult} realresult={element}/>
-    ))}
-
             </div>
         </div>
     );
