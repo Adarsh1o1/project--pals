@@ -52,7 +52,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' ? style : { display: 'none' }}>
+        <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' || location.pathname==='/your-profile'? style : { display: 'none' }}>
             <div className="nav-first-container">
                 <ul>
                     <img src={realimage} id='nav-logo' width={'50vw'} alt="an 3d art view" />
@@ -122,6 +122,11 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <ul>
+                            <li className='your-account'>
+                            <Link to={'/your-profile'}>
+                                        Your Account
+                                    </Link>
+                            </li>
                             <li className='nav-signup'>
                                 <button className='nav-signup' onClick={logout}>Logout</button>
                             </li>

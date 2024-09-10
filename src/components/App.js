@@ -12,6 +12,7 @@ import Chatapp from './Chatapp';
 import Searchmodal from './Searchmodal';
 import Profile from './Profile';
 import About from './About';
+import Youraccount from '../Youraccount';
 
 function App() {
   const[alert,setalert] = useState(null);
@@ -88,6 +89,7 @@ function App() {
           <Route exact path='/login' element={<Login />} />
           
           <Route exact path='/user-profile' element={<Profile showalert={showalert}/>} />
+          <Route exact path='/your-profile' element={<Youraccount/>} />
           <Route exact path='/post' element={<Post showalert={showalert} />} />
           <Route exact path='/message' element={<Chatapp />} />
         </Routes>

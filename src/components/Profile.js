@@ -66,6 +66,9 @@ const Profile = (props) => {
     
     // navigate("/message")
 }
+
+
+
   return (
     
     <div className='profile-main-container'>
@@ -91,6 +94,7 @@ const Profile = (props) => {
         </div>
 
         <div className="profile-biodetails">
+          
           {/* <div className="profile-collegename">
             <ul>
               <li>
@@ -101,9 +105,10 @@ const Profile = (props) => {
               </li>
             </ul>
           </div> */}
-          <h4>About</h4>
+          <h2 style={{fontSize:'20px'}}>About:</h2>
           <div className="profile-bio">
-            {element.bio}
+          
+          {element.bio}
           </div>
         </div>
       </div>))):('')}

@@ -158,25 +158,25 @@ const Post = (props) => {
                 <label htmlFor="Choose a Title">Write your Requirement Title:</label>
               </li>
               <li>
-                <input type="text" className='cp' onChange={changed} value={credentials.title} name="title" maxLength={50} />
+                <input type="text" className='ep' onChange={changed} value={credentials.title} name="title" maxLength={50} />
               </li>
               <li>
                 <label htmlFor="Choose a Title">Write your Project Category:</label>
               </li>
               <li>
-                <input type="text" className='cp' id='Category' value={credentials.category} onChange={changed} name="category" maxLength={60} />
+                <input type="text" className='ep' id='Category' value={credentials.category} onChange={changed} name="category" maxLength={60} />
               </li>
               <li>
                 <label htmlFor="Validation">Post validity(in days):</label>
               </li>
               <li>
-                <input type="number" className='cp' name="post-validation" id='post-validation' />
+                <input type="number" className='ep' name="post-validation" id='post-validation' />
               </li>
               <li>
                 <label htmlFor="Description" >Write about your post:</label>
               </li>
               <li>
-                <textarea name="description" className='cp' id="description" value={credentials.description} onChange={changed} maxLength={250}></textarea>
+                <textarea name="description" className='ep' id="description" value={credentials.description} onChange={changed} maxLength={250}></textarea>
               </li>
             </ul>
           </div>

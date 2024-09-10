@@ -9,13 +9,16 @@ const Chats = () => {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [userStatuses, setUserStatuses] = useState({}); // Track user statuses
   const inputRef = useRef(null);
   const emojiSelectorRef = useRef(null);
   const chatSocket = useRef(null);
-  
+  const onlineStatusSocket = useRef(null);
+
   const token = sessionStorage.getItem('token');
   const username = sessionStorage.getItem('username');
 
+  // WebSocket for chat messages
   useEffect(() => {
     chatSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/testing/?token=${token}`);
 
@@ -41,6 +44,50 @@ const Chats = () => {
       chatSocket.current.close();
     };
   }, [token, username]);
+
+  // WebSocket for user online status
+  useEffect(() => {
+    const loggedin_user = JSON.stringify(username.textContent);
+
+    onlineStatusSocket.current = new WebSocket(
+      'ws://' + window.location.host + '/ws/online/'
+    );
+
+    onlineStatusSocket.current.onopen = function(e) {
+      console.log("CONNECTED TO ONLINE STATUS CONSUMER");
+      onlineStatusSocket.current.send(JSON.stringify({
+        'username': loggedin_user,
+        'online_status': true
+      }));
+    };
+
+    onlineStatusSocket.current.onclose = function(e) {
+      console.log("DISCONNECTED FROM ONLINE STATUS CONSUMER");
+    };
+
+    onlineStatusSocket.current.onmessage = function(e) {
+      const data = JSON.parse(e.data);
+      if (data.username !== loggedin_user) {
+        setUserStatuses(prevStatuses => ({
+          ...prevStatuses,
+          [data.username]: data.online_status ? 'Online' : 'Offline'
+        }));
+      }
+    };
+
+    window.addEventListener("beforeunload", function() {
+      onlineStatusSocket.current.send(JSON.stringify({
+        'username': loggedin_user,
+        'online_status': false
+      }));
+    });
+
+    return () => {
+      if (onlineStatusSocket.current) {
+        onlineStatusSocket.current.close();
+      }
+    };
+  }, []);
 
   const handleInputChange = (e) => setMessage(e.target.value);
 
@@ -79,7 +126,7 @@ const Chats = () => {
           callback();
         }
       };
-      
+
       document.addEventListener('keydown', handleKeyPress);
       return () => document.removeEventListener('keydown', handleKeyPress);
     }, [key, callback]);
@@ -95,7 +142,7 @@ const Chats = () => {
           {messages.map((item, i) => (
             <Message key={i} message={item.message} position={item.position} />
           ))}
-    <div className="emoji-selector" style={isPickerVisible ? { display: 'block',transform:'translateY(100%)'} : { display: 'none' }} ref={emojiSelectorRef}>
+          <div className="emoji-selector" style={isPickerVisible ? { display: 'block', transform: 'translateY(100%)' } : { display: 'none' }} ref={emojiSelectorRef}>
             <Picker data={data} onEmojiSelect={handleEmojiSelect} emojiSize={24} />
           </div>
         </ReactScrollToBottom>
@@ -104,6 +151,17 @@ const Chats = () => {
           <input className="input-text" onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." type="text" />
           <button className="send-message" onClick={sendMessage}>send</button>
         </div>
+      </div>
+      <div className="user-status">
+        <h4>Online Status</h4>
+        {Object.keys(userStatuses).map(user => (
+          <div key={user}>
+            <span id={`${user}_status`} style={{ color: userStatuses[user] === 'Online' ? 'green' : 'grey' }}>
+              {user}
+            </span>
+            <small id={`${user}_small`}>{userStatuses[user]}</small>
+          </div>
+        ))}
       </div>
     </div>
   );
