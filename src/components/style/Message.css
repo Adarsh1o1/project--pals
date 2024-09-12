@@ -1,7 +1,6 @@
-.message-box{
+.message-box {
     background-color: gainsboro;
     width: max-content;
-    /* width: 100px; */
     height: auto;
     display: inline-block;
     border-radius: 0.5vmax;
@@ -9,19 +8,41 @@
     padding: 1vmax;
     margin: 1.5vmax;
     overflow-y: auto;
-    /* overflow-x: auto; */
     overflow-wrap: break-word;
     clear: both;
-}
-
-
-.right{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .messages {
+    /* width: fit-content; */
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .time-date {
+    width: 100%;
+    font-size: 12px;
+    text-align: right;
+  }
+  
+  .right {
     float: right;
     background-color: lightgreen;
+    /* text-align: right; */
+    max-width: 40%;
+    word-break: break-word;
+    overflow-wrap: break-word;
     color: black;
-}
-.left{
+  }
+  
+  .left {
     float: left;
+    text-align: left;
+    max-width: 40%;
+    word-break: break-word;
+    overflow-wrap: break-word;
     background-color: white;
     color: black;
-}
+  }
+  

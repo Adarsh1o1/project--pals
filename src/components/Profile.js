@@ -8,6 +8,7 @@ const Profile = (props) => {
   const initialposts = [];
   const initialsearched = [];
   const [posts, setposts] = useState(initialposts);
+  const [Userid, SetUserid] = useState(null);
   const [search, setsearch] = useState(initialsearched);
   const token = sessionStorage.getItem('token');
   const fetchallposts = async () => {
@@ -29,8 +30,9 @@ const Profile = (props) => {
       headers: { 'Authorization':`Bearer ${token}` }
     });
     let json = await response.json();
-    sessionStorage.setItem('user_id',json[0]?.user_id || "")
-    console.log("json:",json)
+    console.log('profile data', json)
+    SetUserid(json[0]?.user_id);
+    console.log("user_id:",Userid)
     setsearch(json);
     
   }
@@ -64,7 +66,7 @@ const Profile = (props) => {
     //   let json = await response.json();
       // console.log(json);
     // props.showalert('Email has been sent', 'success');
-    
+    sessionStorage.setItem('user_id',Userid);
     navigate("/message")
 }
 
