@@ -90,9 +90,16 @@
 .circle{
     margin-right: 10px;
     background-color: lightgray;
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
+}
+
+.circle img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: contain;
 }
 
 .post-username:hover{

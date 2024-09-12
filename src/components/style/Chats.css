@@ -5,8 +5,8 @@
 
 .chats-container{
     /* max-height: fit-content; */
-    min-height: 100vh;
-    min-width: 78vw;
+    /* min-height: 100vh;*/
+    min-width: 78vw; 
     background-color: #5ea3c9;
     /* margin-left: 15px; */
     border-radius: 15px;
@@ -27,10 +27,19 @@
 }
 
 .chat-box{
-    height: 90vh;
+    min-height: 500px;
+    height: 86vh;
     position: relative;
     overflow-y: auto;
     overflow-x: auto;
+}
+
+.chat-name-pic{
+    height: 100%;
+    padding: 5px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
 }
 
 .react-scroll-to-bottom--css-lmcnc-1n7m0yu {
@@ -43,7 +52,7 @@
     border-radius: 15px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    height: 40px;
+    height: 50px;
     border-bottom-left-radius: 0;
     border: 1px solid lightgray;
     background-color: white;

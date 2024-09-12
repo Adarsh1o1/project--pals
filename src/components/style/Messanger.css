@@ -4,8 +4,8 @@
 }
 
 .messanger-main-container{
-    max-height: 100vh;
-    min-height: 100vh;
+    /* max-height: 100vh;
+    min-height: 100vh; */
     min-width: 22vw;
     background-color: white;
     border-radius: 15px;
@@ -17,6 +17,9 @@
     overflow-x: hidden;
 }
 .messanger-container{
+    height: 91.5vh;
+    min-height: 550px;
+    /* -height: 500px; */
     overflow-x: hidden;
     /* overflow-y: scroll; */
 }

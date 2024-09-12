@@ -9,18 +9,33 @@ const Chats = () => {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [userStatuses, setUserStatuses] = useState({}); // Track user statuses
+  const initialsearched = [];
   const inputRef = useRef(null);
   const emojiSelectorRef = useRef(null);
   const chatSocket = useRef(null);
-  const onlineStatusSocket = useRef(null);
-
+  const [search, setsearch] = useState(initialsearched);
+  const searched_name = sessionStorage.getItem('username1')
   const token = sessionStorage.getItem('token');
   const username = sessionStorage.getItem('username');
 
+
+  const fetchalldata = async () => {
+    let response = await fetch(`http://127.0.0.1:8000/api/accounts/search/${searched_name}`, {
+      method: 'GET',
+      headers: { 'Authorization':`Bearer ${token}` }
+    });
+    let json = await response.json();
+    console.log("json:",json)
+    setsearch(json);
+    
+  }
+  
+  let user_id = sessionStorage.getItem('user_id')
   // WebSocket for chat messages
   useEffect(() => {
-    chatSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/testing/?token=${token}`);
+    fetchalldata();
+    console.log(message);
+    chatSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${user_id}/?token=${token}`);
 
     const handleOpen = () => console.log('WebSocket connected');
     const handleMessage = (e) => {
@@ -46,49 +61,7 @@ const Chats = () => {
   }, [token, username]);
 
   // WebSocket for user online status
-  useEffect(() => {
-    const loggedin_user = JSON.stringify(username.textContent);
-
-    onlineStatusSocket.current = new WebSocket(
-      'ws://' + window.location.host + '/ws/online/'
-    );
-
-    onlineStatusSocket.current.onopen = function(e) {
-      console.log("CONNECTED TO ONLINE STATUS CONSUMER");
-      onlineStatusSocket.current.send(JSON.stringify({
-        'username': loggedin_user,
-        'online_status': true
-      }));
-    };
-
-    onlineStatusSocket.current.onclose = function(e) {
-      console.log("DISCONNECTED FROM ONLINE STATUS CONSUMER");
-    };
-
-    onlineStatusSocket.current.onmessage = function(e) {
-      const data = JSON.parse(e.data);
-      if (data.username !== loggedin_user) {
-        setUserStatuses(prevStatuses => ({
-          ...prevStatuses,
-          [data.username]: data.online_status ? 'Online' : 'Offline'
-        }));
-      }
-    };
-
-    window.addEventListener("beforeunload", function() {
-      onlineStatusSocket.current.send(JSON.stringify({
-        'username': loggedin_user,
-        'online_status': false
-      }));
-    });
-
-    return () => {
-      if (onlineStatusSocket.current) {
-        onlineStatusSocket.current.close();
-      }
-    };
-  }, []);
-
+ 
   const handleInputChange = (e) => setMessage(e.target.value);
 
   const handleEmojiSelect = (emoji) => setMessage(prevMessage => prevMessage + emoji.native);
@@ -104,8 +77,11 @@ const Chats = () => {
     }
   };
 
-  const sendMessage = () => {
-    if (chatSocket.current && chatSocket.current.readyState === WebSocket.OPEN && message !== "") {
+  const sendMessage = (e) => {
+    if(message==="" || message===null){
+      return
+    }
+    else if (chatSocket.current && chatSocket.current.readyState === WebSocket.OPEN) {
       chatSocket.current.send(JSON.stringify({ message, username }));
       setMessage('');
     } else {
@@ -133,16 +109,24 @@ const Chats = () => {
   };
 
   useKeyPress('Enter', sendMessage);
+  // useKeyPress('Enter', handleOutsideClick);
 
   return (
     <div className="chats">
       <div className="chats-container">
-        <div className="chat-header"></div>
+        <div className="chat-header">
+      {Array.isArray(search) ? (search.map((element)=>(
+        <div className="chat-name-pic">
+        <div className="circle" style={element.online_status?{border:'3px solid #25D366'}:{border:'3px solid lightgray'}}><img src={element.image}/></div>
+        <h2>{element.full_name}</h2>
+        </div>))):""}
+
+        </div>
         <ReactScrollToBottom className="chat-box">
           {messages.map((item, i) => (
             <Message key={i} message={item.message} position={item.position} />
           ))}
-          <div className="emoji-selector" style={isPickerVisible ? { display: 'block', transform: 'translateY(100%)' } : { display: 'none' }} ref={emojiSelectorRef}>
+          <div className="emoji-selector" style={isPickerVisible ? { display: 'block',position:'fixed', transform: 'translateY(85%)' } : { display: 'none' }} ref={emojiSelectorRef}>
             <Picker data={data} onEmojiSelect={handleEmojiSelect} emojiSize={24} />
           </div>
         </ReactScrollToBottom>
@@ -151,17 +135,6 @@ const Chats = () => {
           <input className="input-text" onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." type="text" />
           <button className="send-message" onClick={sendMessage}>send</button>
         </div>
-      </div>
-      <div className="user-status">
-        <h4>Online Status</h4>
-        {Object.keys(userStatuses).map(user => (
-          <div key={user}>
-            <span id={`${user}_status`} style={{ color: userStatuses[user] === 'Online' ? 'green' : 'grey' }}>
-              {user}
-            </span>
-            <small id={`${user}_small`}>{userStatuses[user]}</small>
-          </div>
-        ))}
       </div>
     </div>
   );

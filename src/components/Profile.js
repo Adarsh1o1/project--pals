@@ -29,6 +29,7 @@ const Profile = (props) => {
       headers: { 'Authorization':`Bearer ${token}` }
     });
     let json = await response.json();
+    sessionStorage.setItem('user_id',json[0]?.user_id || "")
     console.log("json:",json)
     setsearch(json);
     
@@ -53,18 +54,18 @@ const Profile = (props) => {
     const emails = sessionStorage.getItem('email');
     console.log(emails);
 
-    let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
-        body: JSON.stringify({
-            email: emails
-        })
-      });
-      let json = await response.json();
+    // let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+    //     body: JSON.stringify({
+    //         email: emails
+    //     })
+    //   });
+    //   let json = await response.json();
       // console.log(json);
-    props.showalert('Email has been sent', 'success');
+    // props.showalert('Email has been sent', 'success');
     
-    // navigate("/message")
+    navigate("/message")
 }
 
 

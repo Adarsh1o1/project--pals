@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Userpost from './components/Userpost';
-import './components/style/Youraccount.css';
+import Userpost from './Userpost';
+import './style/Youraccount.css';
 
 const Youraccount = (props) => {
   const initialposts = [];
@@ -17,7 +17,7 @@ const Youraccount = (props) => {
   });
 
   const token = sessionStorage.getItem('token');
-  const searched_name = sessionStorage.getItem('username');
+  const searched_name = sessionStorage.getItem('username1');
 
   const fetchallposts = async () => {
     let response = await fetch(`http://127.0.0.1:8000/api/core/any-user-post/${searched_name}`, {
