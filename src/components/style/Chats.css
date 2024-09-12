@@ -67,3 +67,19 @@
     outline: none;
     padding-left: 15px;
 }
+
+.empty-chat-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 98.7vh;
+    min-height: 600px;
+    min-width: 78vw; 
+    font-size: 40px;
+    font-weight: 500;
+    border-radius: 15px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color:#66a3c4;
+    color: white;
+}

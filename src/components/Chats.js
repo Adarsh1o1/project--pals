@@ -33,6 +33,7 @@ const Chats = () => {
   let user_id = sessionStorage.getItem('user_id')
   // WebSocket for chat messages
   useEffect(() => {
+    if(!user_id || user_id===''|| user_id===null){return}
     fetchalldata();
     console.log(message);
     chatSocket.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${user_id}/?token=${token}`);
@@ -113,6 +114,7 @@ const Chats = () => {
 
   return (
     <div className="chats">
+      {user_id?
       <div className="chats-container">
         <div className="chat-header">
       {Array.isArray(search) ? (search.map((element)=>(
@@ -136,6 +138,7 @@ const Chats = () => {
           <button className="send-message" onClick={sendMessage}>send</button>
         </div>
       </div>
+      :<div className="empty-chat-container">start your conversation</div>}
     </div>
   );
 };

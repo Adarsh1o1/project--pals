@@ -17,7 +17,7 @@ const Youraccount = (props) => {
   });
 
   const token = sessionStorage.getItem('token');
-  const searched_name = sessionStorage.getItem('username1');
+  const searched_name = sessionStorage.getItem('username');
 
   const fetchallposts = async () => {
     let response = await fetch(`http://127.0.0.1:8000/api/core/any-user-post/${searched_name}`, {
@@ -76,7 +76,7 @@ const Youraccount = (props) => {
     }
     fetchalldata();
     fetchallposts();
-  }, []); // Empty array ensures it runs once on mount
+  }, [token]); // Empty array ensures it runs once on mount
 
   const clicked = () => {
     setForm(true);
