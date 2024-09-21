@@ -4,7 +4,8 @@
 }
 
 .postitem-main-container{
-    max-height: 210px;
+    /* max-height: 210px; */
+    height: auto;
     padding: 20px;
     margin-top: 20px;
     width: 55vw;
@@ -46,13 +47,13 @@
 #Category{
     /* color: #01456d; */
     color: black;
-    
     font-size: 20px;
     margin-bottom: 5px;
 }
 
 
 #Description{
+    word-break: break-word;
     /* color:#015B8E; */
     color: black;
 }
@@ -109,4 +110,10 @@
 
 #post_time:hover{
     text-decoration: none;
+}
+
+.read-more{
+    color:#015B8E;
+    /* text-decoration: underline; */
+    cursor: pointer;
 }

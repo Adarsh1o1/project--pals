@@ -144,6 +144,19 @@
 #options{
     display: none;
 }
+.Navbar_x{
+    width: 25px;
+    height: 25px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color:white;
+    border-radius: 50%;
+    /* font-weight: bold; */
+    cursor: pointer;
+    /* background: none; */
+    background-color:#74A8C5;
+}
 
 /* @media screen and (min-width:768px) and (max-width:991px){
     .nav-first-container ul li{

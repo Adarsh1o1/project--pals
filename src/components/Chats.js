@@ -27,6 +27,7 @@ const Chats = () => {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     let json = await response.json();
+    console.log("json:", json);
     setsearch(json);
   };
 
@@ -38,7 +39,6 @@ const Chats = () => {
     });
     let json = await response.json();
     
-    console.log("json:", json);
 
     // Handling the API response if it's an array inside another array
     // if (Array.isArray(json) && Array.isArray(json[0])) {
@@ -165,12 +165,14 @@ const Chats = () => {
             ))}
           </div>
           <ReactScrollToBottom className="chat-box">
+          {/* <div className="chat-box"> */}
             {messages.map((item, i) => (
               <Message key={i} message={item.message} position={item.position} time={item.time} date={item.date}/>
             ))}
             <div className="emoji-selector" style={isPickerVisible ? { display: 'block', position: 'fixed', transform: 'translateY(85%)' } : { display: 'none' }} ref={emojiSelectorRef}>
               <Picker data={data} onEmojiSelect={handleEmojiSelect} emojiSize={24} />
             </div>
+            {/* </div> */}
           </ReactScrollToBottom>
           <div className="chat-input">
             <button className="emoji-button" style={{background:'none',border:'none',outline:'none',width:'70px',height:'70px'}} onClick={toggleEmojiPicker}>🗿</button>

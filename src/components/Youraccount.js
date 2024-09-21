@@ -163,7 +163,7 @@ const Youraccount = (props) => {
               value={credentials.bio}
               onChange={changed}
               name="bio"
-              maxLength="400"
+              maxLength='300'
               required
             /><br /><br /></label>
 

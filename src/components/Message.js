@@ -29,6 +29,7 @@ const Message = ({ message, position, time, date }) => {
           {messageLines.map((line, index) => (
             <div key={index}>{line}</div>
           ))}
+          {/* {message} */}
         </div>
         <div className='time-date'>
           {realDate ? (

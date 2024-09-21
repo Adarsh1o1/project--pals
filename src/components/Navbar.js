@@ -10,6 +10,7 @@ const Navbar = () => {
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState(sessionStorage.getItem('category') || '');
     const [Result, setResult] = useState(sessionStorage.getItem('Result') === 'true'); // Retrieve Result state
+    const [notification, setNotification] = useState(false); // Retrieve Result state
 
     const token = sessionStorage.getItem('token');
 
@@ -50,6 +51,13 @@ const Navbar = () => {
         sessionStorage.clear();
         navigate('/');
     };
+    const handleNotifications = () => {
+        const newNotificationState = !notification; // Toggle the notification state
+        setNotification(newNotificationState);
+        sessionStorage.setItem("notification", newNotificationState); // Update sessionStorage after state change
+        window.location.reload(); // This will cause the Post component to re-render with the new state
+    }
+    
 
     return (
         <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' || location.pathname==='/your-profile'? style : { display: 'none' }}>
@@ -86,16 +94,19 @@ const Navbar = () => {
 
                             <button
                                 style={Result ? { display: "block" } : { display: "none" }}
-                                onClick={handleClick2}
+                                onClick={handleClick2} className='Navbar_x'
                             >
-                                x
+                                X
                             </button>
                         </div>
                     </li>
                     <li></li>
-                    <li className='nav-list'>
-                        <Link to={'/aboutus'}>About us</Link>
+                    <li className='nav-list' onClick={handleNotifications}>
+                        Notifications
                     </li>
+                    {/* <li className='nav-list'>
+                        <Link to={'/aboutus'}>About us</Link>
+                    </li> */}
                     <li className='nav-list'>
                         <Link to={'/post'}>Posts</Link>
                     </li>

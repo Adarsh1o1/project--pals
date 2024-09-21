@@ -1,5 +1,6 @@
 .Useritem-main-container{
-    max-height: 210px;
+    /* max-height: 210px; */
+    height: auto;
     padding: 20px;
     margin-top: 20px;
     width: 1100px;

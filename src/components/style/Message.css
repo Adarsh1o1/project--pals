@@ -1,12 +1,15 @@
 .message-box {
     background-color: gainsboro;
+    min-width: 50px;
     width: max-content;
     height: auto;
     display: inline-block;
     border-radius: 0.5vmax;
     max-width: 40%;
-    padding: 1vmax;
-    margin: 1.5vmax;
+    padding: 0.8vmax;
+    padding-bottom: 0.5vmax;
+    padding-right: 0.5vmax;
+    margin: 1vmax;
     overflow-y: auto;
     overflow-wrap: break-word;
     clear: both;
@@ -22,7 +25,7 @@
   
   .time-date {
     width: 100%;
-    font-size: 12px;
+    font-size: 10px;
     text-align: right;
   }
   

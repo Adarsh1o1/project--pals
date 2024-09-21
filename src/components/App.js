@@ -14,7 +14,7 @@ import About from './About';
 import Youraccount from './Youraccount';
 
 function App() {
-  const [alert, setalert] = useState(null);
+  const [alert, setAlert] = useState(null);
   const [userStatuses, setUserStatuses] = useState({});
   const [loading, setLoading] = useState(true);
   
@@ -26,25 +26,21 @@ function App() {
   const onlineStatusSocket = useRef(null);
 
   // Handle alert
-  const showalert = (message, type) => {
-    setalert({
+  const showAlert = (message, type) => {
+    setAlert({
       msg: message,
       type: type
     });
     setTimeout(() => {
-      setalert(null);
+      setAlert(null);
     }, 1500);
   };
 
   // Redirect based on token and location
-  const sendBack = () => {
+  useEffect(() => {
     if (token && (location.pathname === "/login" || location.pathname === "/signup")) {
       navigate('/post');
     }
-  };
-
-  useEffect(() => {
-    sendBack();
   }, [location, navigate, token]);
 
   // Handle loading state
@@ -72,7 +68,10 @@ function App() {
       }
     };
 
-    const handlePopState = () => {
+    const handleBeforeUnload = (e) => {
+      // Prevent the default action and remove the alert prompt
+      // e.preventDefault();
+      // e.returnValue = ''; // Some browsers require returnValue to be set for the message to appear
       sendOnlineStatus(false);
     };
 
@@ -95,13 +94,14 @@ function App() {
       }
     };
 
-    // Event listeners
-    // window.addEventListener("popstate", handlePopState);
-    // window.addEventListener("beforeunload", () => sendOnlineStatus(false));
+    // Add event listener for tab close/unload
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    // window.addEventListener("close",handleBeforeUnload)
 
     return () => {
-      window.removeEventListener("popstate", handlePopState);
-      if (onlineStatusSocket.current) {
+      // window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("close", handleBeforeUnload);
+      if (onlineStatusSocket.current && !token) {
         sendOnlineStatus(false); // Ensure status is sent before closing
         onlineStatusSocket.current.close();
       }
@@ -111,23 +111,25 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      {alert ? (
-        <Alert alert={alert} />
-      ) : (
-        <div className="alert-placeholder" style={location.pathname === '/post' ? { height: '40px' } : { display: "none" }} />
-      )}
+      {alert && <Alert alert={alert} />}
+      
+      {/* Placeholder for alert */}
+      <div 
+        className="alert-placeholder" 
+        style={location.pathname === '/post' ? { height: '40px' } : { display: "none" }} 
+      />
 
       <Routes>
         <Route path='*' element={<Error />} />
         <Route path='/aboutus' element={<About />} />
         <Route path='/paartnup' element={<Home />} />
         <Route path='/' element={<Home />} />
-        <Route exact path='/signup' element={<Signup />} />
-        <Route exact path='/login' element={<Login />} />
-        <Route exact path='/user-profile' element={<Profile showalert={showalert} />} />
-        <Route exact path='/your-profile' element={<Youraccount />} />
-        <Route exact path='/post' element={<Post showalert={showalert} />} />
-        <Route exact path='/message' element={<Chatapp />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/user-profile' element={<Profile showalert={showAlert} />} />
+        <Route path='/your-profile' element={<Youraccount />} />
+        <Route path='/post' element={<Post showalert={showAlert} />} />
+        <Route path='/message' element={<Chatapp />} />
       </Routes>
     </div>
   );
