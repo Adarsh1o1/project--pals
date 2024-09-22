@@ -111,7 +111,10 @@ const Post = (props) => {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     let json = await response.json();
+    console.log(json)
     sessionStorage.setItem('user_id',json.from_user);
+    // sessionStorage.setItem(`connectStatus_${id}`,json.from_user);
+    sessionStorage.setItem(`connectStatus_${json.from_user}`,json.detail);
     navigate("/message");
   };
 

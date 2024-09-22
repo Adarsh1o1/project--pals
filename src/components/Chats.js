@@ -4,7 +4,7 @@ import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import Message from "./Message";
 import ReactScrollToBottom from 'react-scroll-to-bottom';
-
+import sendButton from './style/send_24dp_434343_FILL0_wght400_GRAD0_opsz24.png'
 
 const Chats = () => {
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -19,6 +19,8 @@ const Chats = () => {
   const token = sessionStorage.getItem('token');
   const username = sessionStorage.getItem('username');
   let user_id = sessionStorage.getItem('user_id');
+  let your_id = sessionStorage.getItem('your_id');
+
 
   const fetchalldata = async () => {
     console.log('user_id', user_id);
@@ -56,6 +58,7 @@ const Chats = () => {
       // console.error("Unexpected response format:", json);
     // }
   };
+
 
   // WebSocket for chat messages
   useEffect(() => {
@@ -175,10 +178,10 @@ const Chats = () => {
             {/* </div> */}
           </ReactScrollToBottom>
           <div className="chat-input">
-            <button className="emoji-button" style={{background:'none',border:'none',outline:'none',width:'70px',height:'70px'}} onClick={toggleEmojiPicker}>🗿</button>
+            <button className="emoji-button" style={{background:'none',border:'none',outline:'none',fontSize:'28px',cursor:'pointer'}} onClick={toggleEmojiPicker}>🗿</button>
             <textarea className="input-text" rows={1} columns={50} onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." ></textarea>
             {/* <input className="input-text" onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." type="text" /> */}
-            <button className="send-message" onClick={sendMessage}>send</button>
+            <span className="send-message"><img src={sendButton} style={{width:'40px',cursor:'pointer'}} onClick={sendMessage}/></span>
           </div>
         </div>
       ) : (

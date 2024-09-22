@@ -36,6 +36,7 @@ const Youraccount = (props) => {
     let json = await response.json();
     console.log("Profile:", json);
     setsearch(json);
+    sessionStorage.setItem('your_id',json.user_id);
     setcredentials({
       username: json.username,
       full_name: json.full_name,

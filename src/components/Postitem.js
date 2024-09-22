@@ -5,31 +5,43 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const Postitem = ({ post, showalert }) => {
   const token = sessionStorage.getItem('token');
   const navigate = useNavigate();
-  let location = useLocation();
+  const location = useLocation();
   const [showMore, setShowmore] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [color, setColor] = useState('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
+  const [textColor,setTextColor] = useState('#015B8E')
+  
   function capitalize(str) {
-    if (!str) return ''; // Handle empty or null strings
+    if (!str) return ''; 
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
-  // Initialize connectButton from sessionStorage or default to 'Connect'
   const [connectButton, setConnectButton] = useState(
-    sessionStorage.getItem(`connectStatus_${post?.id}`) || 'Connect'
+    sessionStorage.getItem(`connectStatus_${post?.userid}`) || 'Connect'
   );
-
-  const [connectStatus, setConnectStatus] = useState(false);
-
-  const username1 = sessionStorage.getItem('username1');
 
   const handleUsernameClick = () => {
     if (post?.username) {
       sessionStorage.setItem('username1', post.username);
-      
       if (location.pathname === "/user-profile") {
         window.location.reload();
+      } else {
+        navigate('/user-profile');
       }
-      navigate('/user-profile');
+    }
+  };
+
+  const updateColor = () => {
+    const status = sessionStorage.getItem(`connectStatus_${post?.userid}`);
+    if (status === 'pending') {
+      setColor('lightgray');
+      setTextColor('gray')
+    } else if (status === 'Accepted') {
+      setColor('lightgreen');
+      setTextColor('white')
+    } else {
+      setColor('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
+      setTextColor('#015B8E')
     }
   };
 
@@ -38,49 +50,52 @@ const Postitem = ({ post, showalert }) => {
   };
 
   const clicked = async () => {
-    const username1 = post?.username;
+    // setLoading(true);
+    // const username1 = post?.username;
     const userId = post?.userid;
-    const emails = post?.email;
-    const post_id = post?.id;
-    sessionStorage.removeItem('Status');
-    sessionStorage.setItem('username1', username1);
+    // const emails = post?.email;
+    // const post_id = post?.id;
+    // sessionStorage.removeItem('Status');
+    // sessionStorage.setItem('username1', username1);
     sessionStorage.setItem('user_id', userId);
-  
-    // First API call
-    let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        email: emails,
-      }),
-    });
-  
-    let json = await response.json();
+    navigate('/message')
 
-    // Second API call
-    let response2 = await fetch('http://127.0.0.1:8000/api/chat/request/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        to_user: username1,
-      }),
-    });
-  
-    let json2 = await response2.json();
-    let detail = capitalize(json2.detail);
-    console.log('detail:',detail)
-    // Update the connect button state and store it in sessionStorage
-    setConnectButton(detail);
-    setConnectStatus(true);
-    sessionStorage.setItem(`connectStatus_${post_id}`, json2.detail);  // Store with unique key for the user
-    console.log('Request sent', json2);
+    // try {
+    //   const response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${token}`,
+    //     },
+    //     body: JSON.stringify({ email: emails }),
+    //   });
+
+    //   const json = await response.json();
+
+    //   const response2 = await fetch('http://127.0.0.1:8000/api/chat/request/', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${token}`,
+    //     },
+    //     body: JSON.stringify({ to_user: username1 }),
+    //   });
+
+    //   const json2 = await response2.json();
+    //   const detail = capitalize(json2.detail);
+    //   setLoading(false);
+    //   setConnectButton(detail);
+    //   sessionStorage.setItem(`connectStatus_${post?.userid}`, json2.detail);
+    //   updateColor();
+    // } catch (error) {
+    //   console.error("Error during fetch:", error);
+    //   setLoading(false);
+    // }
   };
+
+  useEffect(() => {
+    updateColor(); // Update color based on connection status when component mounts or when token changes
+  }, [token,connectButton]);
 
   return (
     <div className='postitem-main-container'>
@@ -92,7 +107,9 @@ const Postitem = ({ post, showalert }) => {
               <div id='post_time'> Updated {post?.time_since_posted}</div>
             </li>
             <li className='connect-button'>
-              <button onClick={clicked}>{connectButton}</button>
+              <button onClick={clicked} style={{ background: color, color:textColor, fontWeight:'500' }}>
+                {loading ? "Loading..." : connectButton}
+              </button>
             </li>
           </ul>
         </div>

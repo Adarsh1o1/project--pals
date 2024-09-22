@@ -6,7 +6,7 @@
 .messanger-main-container{
     /* max-height: 100vh;
     min-height: 100vh; */
-    min-width: 22vw;
+    width: 22vw;
     background-color: white;
     border-radius: 15px;
     /* margin-left: 15px; */
@@ -33,4 +33,12 @@
     display: flex;
     align-items: center;
 
+}
+
+.arrow-back{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    cursor: pointer;
+    margin-right: 10px;
 }

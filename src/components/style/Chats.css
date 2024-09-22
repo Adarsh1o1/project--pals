@@ -7,10 +7,12 @@
     /* max-height: fit-content; */
     /* min-height: 100vh;*/
     min-width: 78vw; 
-    background-color: #5ea3c9;
+    /* background-color: #5ea3c9; */
     /* margin-left: 15px; */
     border-radius: 15px;
     border-top-left-radius: 0;
+    background-color: #66a3c4;
+
     border-bottom-left-radius: 0;
 
 }
@@ -26,13 +28,35 @@
    
 }
 
-.chat-box{
+.chat-box {
     min-height: 500px;
     height: 86vh;
     position: relative;
     overflow-y: auto;
     overflow-x: auto;
+    background-size: cover;
+    background-position: center;
 }
+
+.chat-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('doodle.png');
+    opacity: 0.3;
+    background-size: contain;
+    background-position: center;
+    z-index: 1; /* Ensure the background overlay stays in place */
+}
+
+.chat-box .content {
+    position: relative;
+    z-index: 2; /* Ensure the content appears above the background */
+}
+
 
 .date-header {
     text-align: center;
@@ -94,5 +118,8 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     background-color:#66a3c4;
+    background-image: url('doodle.png');
+    background-size: contain;
+    background-repeat: repeat;
     color: white;
 }

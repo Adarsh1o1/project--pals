@@ -6,12 +6,29 @@
 .messagecomp-container{
     width: 100%;
     padding:10px;
-    padding-left:25px;
+    padding-left:15px;
+    width: 22vw;
+    margin-bottom: 2px;
     height: fit-content;
     background-color: aliceblue;
     display: flex;
-    justify-content: left;
+    /* justify-content: left; */
     align-items: center;
+    /* border-bottom: 1px solid lightgray; */
     font-size: 18px;
     overflow-y: auto;
 }  
+
+.recentChats{
+    cursor: pointer;
+}
+
+.recentChats ul li{
+    list-style: none;
+}
+
+.message-time{
+    width: 100%;
+    display: flex;
+    /* justify-content: space-between; */
+}
