@@ -1,65 +1,120 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './style/Post.css';
 import addimage from './style/add-on-icon-29.jpg';
 import Postitem from './Postitem';
+import { FlashOnTwoTone } from '@mui/icons-material';
+// import InfiniteScroll from "react-infinite-scroll-component";
 
 const Post = (props) => {
-  const [credentials, setCredentials] = useState({ title: '', category: '', description: '' });
+
+  const [color,setColor] = useState('#015B8E')
+  const [textColor,setTextColor] = useState('white')
+  const [Next,setNext] = useState(false)
+  const [Prev,setPrev] = useState(true)
+  const [prevcolor,setprevColor] = useState('#015B8E')
+  const [prevtextColor,setprevTextColor] = useState('white')
   const [modalResult, setModalResult] = useState(false);
+  // const [hasMore, sethasMore] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [posts, setPosts] = useState([]);
+  // const [totalposts, setTotalPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+  const [hasMore, setHasMore] = useState(true); // Check if more posts are available
+
   const [requests, setRequests] = useState([]);
   const token = sessionStorage.getItem('token');
   const category = sessionStorage.getItem('category');
   const notification = sessionStorage.getItem('notification') === 'true'; // Convert to boolean
   const [close, setClose] = useState(!notification); // Set close to true if notification is false
-
   const navigate = useNavigate();
+  const [nextPage ,setNextPage] = useState('');
+  const [prevPage ,setPrevPage] = useState('');
 
-  const changed = (e) => {
-    setCredentials({
-      ...credentials, [e.target.name]: e.target.value
-    });
-  }
 
-  const postData = async (e) => {
-    e.preventDefault();
 
-    let response = await fetch('http://127.0.0.1:8000/api/core/create-post/', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        title: credentials.title,
-        category: credentials.category,
-        description: credentials.description
-      })
-    });
-
-    if (response.ok) {
-      fetchAllPosts();
+    const updateColor = (status) => {
+    // const status = sessionStorage.getItem(`connectStatus_${post?.userid}`);
+    if (status === null) {
+      setColor('lightgray');
+      setTextColor('gray')
+      setNext(true)
     }
-    setCredentials({ title: '', category: '', description: '' });
-  }
+    else {
+      setColor('#015B8E');
+      setTextColor('white')
+      setNext(false)
+    }
+    console.log(Next)
+  };
+    const prevupdateColor = (status) => {
+    // const status = sessionStorage.getItem(`connectStatus_${post?.userid}`);
+    if (status === null) {
+      setprevColor('lightgray');
+      setprevTextColor('gray')
+      setPrev(true);
+
+    }
+    else {
+      setprevColor('#015B8E');
+      setprevTextColor('white')
+      setPrev(false);
+    }
+    console.log("Prev",Prev)
+  };
+
+
+
+  // const fetchAllPosts = async (prev_number,post_number) => {
+  //   if (!category) {
+  //     const response = await fetch('http://127.0.0.1:8000/api/core/show-post/', {
+  //       method: 'GET',
+  //       headers: { 'Authorization': `Bearer ${token}` }
+  //     });
+  //     const json = await response.json();
+  //     console.log('allposts', json);
+  //     setTotalPosts(json.payload);
+
+  //     if(json.payload.length>5){
+  //       setPosts(json.payload.slice(prev_number,post_number));
+  //     }
+  //     else{
+  //       setPosts(json.payload);
+  //     }
+
+  //     if(totalposts.length>posts.length){
+  //       sethasMore(true);
+  //     }
+  //     else{
+  //       sethasMore(false);
+  //     }
+  //   }
+  // }
+
 
   const fetchAllPosts = async () => {
-    if (!category) {
-      let response = await fetch('http://127.0.0.1:8000/api/core/show-post/', {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      let json = await response.json();
-      console.log('allposts',json);
-      setPosts(json.payload);
+    let response = await fetch(`http://127.0.0.1:8000/api/core/show-post/`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    let json = await response.json();
+    console.log('allposts', json);
+
+    // If first page, set posts to the fetched posts
+    if (currentPage === 1) {
+      setPosts(json.posts);
+    } else {
+      // Append new posts
+      setPosts(prevPosts => [...prevPosts, ...json.posts]);
     }
+    setNextPage(json.next_page);
+    prevupdateColor(null);
   }
+
 
   const fetchData = async () => {
     if (!category) return;
-    let response = await fetch(`http://127.0.0.1:8000/api/core/search/${category}`, {
+    const response = await fetch(`http://127.0.0.1:8000/api/core/search/${category}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -79,7 +134,7 @@ const Post = (props) => {
       navigate('/login');
     }
 
-    let response = await fetch(`http://127.0.0.1:8000/api/chat/pendingRequest/`, {
+    const response = await fetch('http://127.0.0.1:8000/api/chat/pendingRequest/', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -106,15 +161,14 @@ const Post = (props) => {
       navigate('/login');
     }
 
-    let response = await fetch(`http://127.0.0.1:8000/api/chat/request/${id}/accept`, {
+    const response = await fetch(`http://127.0.0.1:8000/api/chat/request/${id}/accept`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
-    let json = await response.json();
-    console.log(json)
-    sessionStorage.setItem('user_id',json.from_user);
-    // sessionStorage.setItem(`connectStatus_${id}`,json.from_user);
-    sessionStorage.setItem(`connectStatus_${json.from_user}`,json.detail);
+    const json = await response.json();
+    console.log(json);
+    sessionStorage.setItem('user_id', json.from_user);
+    sessionStorage.setItem(`connectStatus_${json.from_user}`, json.detail);
     navigate("/message");
   };
 
@@ -134,12 +188,55 @@ const Post = (props) => {
   }, [token]);
 
   const closeNotification = () => {
-    setClose(false); // Close the notification when called
+    setClose(true); // Close the notification when called
     sessionStorage.setItem('notification', 'false'); // Update session storage
-    window.location.reload()
+    window.location.reload();
   }
   
+  const PageData = async() =>{
 
+      let response = await fetch( nextPage, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let json = await response.json();
+      console.log('allposts', json);
+  
+      // If first page, set posts to the fetched posts
+
+        // Append new posts
+        setPosts(prevPosts => [...prevPosts, ...json.posts]);
+      
+      setNextPage(json.next_page);
+      setPrevPage(json.previous_page);
+      updateColor(json.next_page);
+      prevupdateColor(json.previous_page);
+    
+  }
+  // const PrevPageData = async() =>{
+  //   if(prevPage===null){
+  //     setPrev(true);
+  //     return;
+  //   }
+  //       setPrev(false)
+  //       let response = await fetch( prevPage, {
+  //         method: 'GET',
+  //         headers: { 'Authorization': `Bearer ${token}` }
+  //       });
+  //       let json = await response.json();
+  //       console.log('allposts', json);
+    
+  //       // If first page, set posts to the fetched posts
+  
+  //         // Append new posts
+  //       setPosts(prevPosts => [...prevPosts, ...json.posts]);
+        
+  //       setPrevPage(json.previous_page);
+  //       prevupdateColor(json.previous_page);
+
+
+    
+  // }
   return (
     <div className='post-main-container'>
       <div className="post-submain-container">
@@ -150,7 +247,7 @@ const Post = (props) => {
                 <li>
                   <label htmlFor="greetings" id="post-heading">Hello, {sessionStorage.getItem('username')}</label>
                 </li>
-                <li>
+                <li id='some-text'>
                   What's on your mind today?
                 </li>
               </ul>
@@ -159,11 +256,11 @@ const Post = (props) => {
               <ul>
                 <li>
                   <div className="createpost-subsubsecond-container">
-                    <label htmlFor="greetings" id="createpost-heading">View Posts of Universities/Colleges</label>
-                    <img src={addimage} alt="an addition sign" />
+                    <label htmlFor="greetings" id="createpost-heading">Create Your Post</label>
+                    <Link to={'/create-post'}><img src={addimage} style={{cursor:'pointer'}} alt="an addition sign" /></Link>
                   </div>
                 </li>
-                <li>
+                <li >
                   Got some awesome projects? Find the best team to team up now!!
                 </li>
               </ul>
@@ -202,68 +299,43 @@ const Post = (props) => {
               </span>
             )}
           </div>
-
-          <div className="post-secondmain-container">
-            <div className="all-posts">
-              {modalResult ? (
-                searchResults.length > 0 ? (
-                  searchResults.map((element) => (
-                    <Postitem key={element.id} showalert={props.showalert} post={element} />
-                  ))
+          {/* <InfiniteScroll
+            dataLength={totalposts.length}
+            next={fetchMoreData}
+            hasMore={(hasMore)}
+            loader={<h4>Loading...</h4>}
+          > */}
+            <div className="post-secondmain-container">
+              <div className="all-posts">
+                {modalResult ? (
+                  searchResults.length > 0 ? (
+                    searchResults.map((element) => (
+                      <Postitem key={element.id} showalert={props.showalert} post={element} />
+                    ))
+                  ) : (
+                    <p>No posts available</p>
+                  )
                 ) : (
-                  <p>No posts available</p>
-                )
-              ) : (
-                Array.isArray(posts) && posts.length > 0 ? (
-                  posts.map((element) => (
-                    <Postitem key={element.id} showalert={props.showalert} post={element} />
-                  ))
-                ) : (
-                  <p>No posts available</p>
-                )
-              )}
+                  Array.isArray(posts) && posts.length > 0 ? (
+                    posts.map((element) => (
+                      <Postitem key={element.id} showalert={props.showalert} post={element} />
+                    ))
+                  ) : (
+                    <p>No posts available</p>
+                  )
+                )}
+              </div>
             </div>
-          </div>
+            <div className='next-prev'>                
+              {/* <button className='next-prev-button' onClick={PrevPageData} style={{backgroundColor:prevcolor,color:prevtextColor}} disabled={Prev}>Previous</button> */}
+                <button className='next-prev-button' style={{backgroundColor:color,color:textColor}} onClick={PageData} disabled={Next}>Load More</button>
+            </div>
+          {/* </InfiniteScroll> */}
         </div>
       </div>
 
       {/* Create Post Section */}
-      <div className="post-second-container">
-        <label htmlFor="Create Post" id='create-post'>Create Post</label>
-        <div className="createpost-first-container">
-          <div className="createpost-second-container">
-            <ul>
-              <li>
-                <label htmlFor="Choose a Title">Write your Requirement Title:</label>
-              </li>
-              <li>
-                <input type="text" className='ep' onChange={changed} value={credentials.title} name="title" maxLength={50} />
-              </li>
-              <li>
-                <label htmlFor="Choose a Title">Write your Project Category:</label>
-              </li>
-              <li>
-                <input type="text" className='ep' id='Category' value={credentials.category} onChange={changed} name="category" maxLength={60} />
-              </li>
-              <li>
-                <label htmlFor="Validation">Post validity (in days):</label>
-              </li>
-              <li>
-                <input type="number" className='ep' name="post-validation" id='post-validation' />
-              </li>
-              <li>
-                <label htmlFor="Description">Write about your post:</label>
-              </li>
-              <li>
-                <textarea name="description" className='ep' id="description" value={credentials.description} onChange={changed}></textarea>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="cp-button">
-          <button onClick={postData}>Create Post</button>
-        </div>
-      </div>
+
     </div>
   );
 }

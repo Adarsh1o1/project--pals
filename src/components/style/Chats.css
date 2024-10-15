@@ -34,28 +34,28 @@
     position: relative;
     overflow-y: auto;
     overflow-x: auto;
-    background-size: cover;
+    background-image: url('doodle2.png');
+    background-size: contain;
     background-position: center;
 }
 
-.chat-box::before {
+/* .chat-box::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('doodle.png');
     opacity: 0.3;
     background-size: contain;
     background-position: center;
     z-index: 1; /* Ensure the background overlay stays in place */
-}
-
+/*} */
+/* 
 .chat-box .content {
     position: relative;
     z-index: 2; /* Ensure the content appears above the background */
-}
+/*} */
 
 
 .date-header {

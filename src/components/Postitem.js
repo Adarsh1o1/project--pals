@@ -7,18 +7,18 @@ const Postitem = ({ post, showalert }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showMore, setShowmore] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [color, setColor] = useState('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
-  const [textColor,setTextColor] = useState('#015B8E')
+  // const [loading, setLoading] = useState(false);
+  const [messageBtn, setMessageBtn] = useState(false);
+  // const [color, setColor] = useState('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
+  // const [textColor,setTextColor] = useState('#015B8E')
+  // const [requestId,setRequestId] = useState(0)
   
   function capitalize(str) {
     if (!str) return ''; 
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
-  const [connectButton, setConnectButton] = useState(
-    sessionStorage.getItem(`connectStatus_${post?.userid}`) || 'Connect'
-  );
+  const [connectButton, setConnectButton] = useState('Connect');
 
   const handleUsernameClick = () => {
     if (post?.username) {
@@ -31,34 +31,82 @@ const Postitem = ({ post, showalert }) => {
     }
   };
 
-  const updateColor = () => {
-    const status = sessionStorage.getItem(`connectStatus_${post?.userid}`);
-    if (status === 'pending') {
-      setColor('lightgray');
-      setTextColor('gray')
-    } else if (status === 'Accepted') {
-      setColor('lightgreen');
-      setTextColor('white')
-    } else {
-      setColor('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
-      setTextColor('#015B8E')
-    }
-  };
+
+  // const updateColor = (status) => {
+  //   // const status = sessionStorage.getItem(`connectStatus_${post?.userid}`);
+  //   if (status === 'pending') {
+  //     setColor('lightgray');
+  //     setTextColor('gray')
+  //   } else if (status === 'accepted') {
+  //     setColor('#5bb450');
+  //     setTextColor('white')
+  //   } else {
+  //     setColor('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
+  //     setTextColor('#015B8E')
+  //   }
+  // };
 
   const toggleShowMore = () => {
     setShowmore(!showMore);
   };
 
+  // const handleStatus = async()=>{
+  //   const response2 = await fetch('http://127.0.0.1:8000/api/chat/request/', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${token}`,
+  //     },
+  //   });
+
+  //   const json2 = await response2.json();
+  //   const detail = capitalize(json2.detail);
+
+  //   setConnectButton(detail);
+  //   setRequestId(json2.id);
+  // }
+
+  const handleRequests = async() =>{
+    const username1 = post?.username
+    const response2 = await fetch('http://127.0.0.1:8000/api/chat/request/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ to_user: username1 }),
+    });
+
+    const json2 = await response2.json();
+
+    // sessionStorage.setItem(`connectStatus_${post?.userid}`, json2.detail);
+    // console.log("REQUEST iD:",json2);
+    if(json2.detail==="accepted"){
+      setMessageBtn(true);
+    }
+    // updateColor(json2.detail);
+  }
+
+  // const handleMessage = () =>{
+  //   const userId = post?.userid;
+  //   const username1 = post?.username
+  //   sessionStorage.setItem('user_id', userId);
+  //   sessionStorage.setItem('username1', username1);
+  //   navigate('/message')
+  // }
+
   const clicked = async () => {
     // setLoading(true);
     // const username1 = post?.username;
-    const userId = post?.userid;
-    // const emails = post?.email;
+    // const userId = post?.userid;
+    const username1 = post?.username
+    const emails = post?.email;
     // const post_id = post?.id;
     // sessionStorage.removeItem('Status');
     // sessionStorage.setItem('username1', username1);
-    sessionStorage.setItem('user_id', userId);
-    navigate('/message')
+    sessionStorage.setItem('emails', emails);
+    sessionStorage.setItem('username1', username1);
+    navigate('/user-profile')
 
     // try {
     //   const response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
@@ -71,31 +119,18 @@ const Postitem = ({ post, showalert }) => {
     //   });
 
     //   const json = await response.json();
-
-    //   const response2 = await fetch('http://127.0.0.1:8000/api/chat/request/', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${token}`,
-    //     },
-    //     body: JSON.stringify({ to_user: username1 }),
-    //   });
-
-    //   const json2 = await response2.json();
-    //   const detail = capitalize(json2.detail);
-    //   setLoading(false);
-    //   setConnectButton(detail);
-    //   sessionStorage.setItem(`connectStatus_${post?.userid}`, json2.detail);
-    //   updateColor();
+    // // handleRequests();
+    // // setLoading(false);
     // } catch (error) {
     //   console.error("Error during fetch:", error);
-    //   setLoading(false);
+    //   // setLoading(false);
     // }
   };
 
   useEffect(() => {
-    updateColor(); // Update color based on connection status when component mounts or when token changes
-  }, [token,connectButton]);
+    // updateColor();
+    // handleRequests(); // Update color based on connection status when component mounts or when token changes
+  }, []);
 
   return (
     <div className='postitem-main-container'>
@@ -104,12 +139,17 @@ const Postitem = ({ post, showalert }) => {
           <ul>
             <li id='name'>
               <div className='post-username' onClick={handleUsernameClick}>@{post?.username}</div>
-              <div id='post_time'> Updated {post?.time_since_posted}</div>
+              <div id='post_time'>  {post?.time_since_posted} ago</div>
             </li>
             <li className='connect-button'>
-              <button onClick={clicked} style={{ background: color, color:textColor, fontWeight:'500' }}>
-                {loading ? "Loading..." : connectButton}
+              <button onClick={clicked}>
+                Visit Profile
               </button>
+            {/* <li style={messageBtn?{display:'flex',marginLeft:'5px'}:{display:'none'}}>
+              <button onClick={handleMessage}>
+                Message
+              </button>
+              </li> */}
             </li>
           </ul>
         </div>
@@ -127,6 +167,7 @@ const Postitem = ({ post, showalert }) => {
               )}
             </li>
           </ul>
+          <div id='bottom-post_time'>  {post?.time_since_posted} ago</div>
         </div>
       </div>
     </div>

@@ -34,7 +34,7 @@ const Navbar = () => {
             // Optionally, you could provide some feedback to the user here
             console.log("Search term is empty. Cannot perform search.");
         }
-        if(location.pathname!=='/post'){
+        if (location.pathname !== '/post') {
             navigate('/post')
             window.location.reload();
         }
@@ -57,10 +57,10 @@ const Navbar = () => {
         sessionStorage.setItem("notification", newNotificationState); // Update sessionStorage after state change
         window.location.reload(); // This will cause the Post component to re-render with the new state
     }
-    
+
 
     return (
-        <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' || location.pathname==='/your-profile'? style : { display: 'none' }}>
+        <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' || location.pathname === '/your-profile' || location.pathname === '/create-post' ? style : { display: 'none' }}>
             <div className="nav-first-container">
                 <ul>
                     <img src={realimage} id='nav-logo' width={'50vw'} alt="an 3d art view" />
@@ -81,16 +81,16 @@ const Navbar = () => {
                                 }}
                                 onChange={handleSearch}
                             />
-<img
-    src={searchbtn}
-    alt="button for searching"
-    style={{
-        display: Result ? "none" : "block",
-        cursor: searchTerm.trim() === "" ? "not-allowed" : "pointer",
-        opacity: searchTerm.trim() === "" ? 0.5 : 1
-    }}
-    onClick={searchTerm.trim() !== "" ? handleClick1 : null}
-/>
+                            <img
+                                src={searchbtn}
+                                alt="button for searching"
+                                style={{
+                                    display: Result ? "none" : "block",
+                                    cursor: searchTerm.trim() === "" ? "not-allowed" : "pointer",
+                                    opacity: searchTerm.trim() === "" ? 0.5 : 1
+                                }}
+                                onClick={searchTerm.trim() !== "" ? handleClick1 : null}
+                            />
 
                             <button
                                 style={Result ? { display: "block" } : { display: "none" }}
@@ -134,9 +134,9 @@ const Navbar = () => {
                     ) : (
                         <ul>
                             <li className='your-account'>
-                            <Link to={'/your-profile'}>
-                                        Your Account
-                                    </Link>
+                                <Link to={'/your-profile'}>
+                                    Your Account
+                                </Link>
                             </li>
                             <li className='nav-signup'>
                                 <button className='nav-signup' onClick={logout}>Logout</button>

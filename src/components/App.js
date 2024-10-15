@@ -12,6 +12,7 @@ import Chatapp from './Chatapp';
 import Profile from './Profile';
 import About from './About';
 import Youraccount from './Youraccount';
+import CreatePost from './CreatePost';
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -37,11 +38,11 @@ function App() {
   };
 
   // Redirect based on token and location
-  useEffect(() => {
-    if (token && (location.pathname === "/login" || location.pathname === "/signup")) {
-      navigate('/post');
-    }
-  }, [location, navigate, token]);
+  // useEffect(() => {
+  //   if (token && (location.pathname === "/login" || location.pathname === "/signup")) {
+  //     navigate('/post');
+  //   }
+  // }, [location, navigate, token]);
 
   // Handle loading state
   useEffect(() => {
@@ -120,6 +121,7 @@ function App() {
       />
 
       <Routes>
+        
         <Route path='*' element={<Error />} />
         <Route path='/aboutus' element={<About />} />
         <Route path='/paartnup' element={<Home />} />
@@ -129,6 +131,7 @@ function App() {
         <Route path='/user-profile' element={<Profile showalert={showAlert} />} />
         <Route path='/your-profile' element={<Youraccount />} />
         <Route path='/post' element={<Post showalert={showAlert} />} />
+        <Route path='/create-post' element={<CreatePost showalert={showAlert} />} />
         <Route path='/message' element={<Chatapp />} />
       </Routes>
     </div>

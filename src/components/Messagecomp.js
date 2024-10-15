@@ -16,7 +16,7 @@ const Messagecomp = ({recentChats,key,user_id,image,last_message,last_updated}) 
             
               <ul>
                 <li>{recentChats}</li>
-                <li className='message-time' style={{fontSize:'13px',fontWeight:'500',color:'Black'}}><span>&nbsp;{last_updated}</span></li>
+                <li className='message-time' style={{fontSize:'13px',fontWeight:'500',color:'Black'}}><span>Updated&nbsp;{last_updated}</span></li>
               
               </ul>
             </div>

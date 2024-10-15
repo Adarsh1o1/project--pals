@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import './style/Otp.css'
 import OtpInput from 'react-otp-input';
 import { useNavigate } from 'react-router-dom';
+import { Token } from '@mui/icons-material';
 
 const Otp = (props) => {
   let navigate = useNavigate();
+  const token = sessionStorage.getItem('token')
   const [check, setcheck] = useState(true)
   const handleClick = () => {
     props.onBack();
@@ -18,10 +20,14 @@ const Otp = (props) => {
     })
 
     let datarecieved = await response.json();
-    console.log(datarecieved.msg)
-    if(datarecieved.msg === 'email verified'){
-      navigate('/login')
+    if (response.ok) {
+      console.log('OTP verification successful');
+      navigate('/login');
+    } else {
+      console.log('Error:', datarecieved.msg);
+      // Optionally, handle failed OTP verification
     }
+    
   }
 
   const toggle = () => {
@@ -56,7 +62,7 @@ const Otp = (props) => {
 
       </div>
         <button type="submit" style={{ marginTop: '50px',marginRight:'10px' }} onClick={handleClick} className="otp-Signup">Back</button>
-        <button type="submit" disabled={check ? true : false} onClick={otpdata} className="otp-Signup">Signup</button>
+        <button disabled={check ? true : false} onClick={otpdata} className="otp-Signup">Signup</button>
 
     </div>
   )

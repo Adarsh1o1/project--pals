@@ -2,14 +2,63 @@ import React, { useEffect, useState } from 'react';
 import './style/Profile.css';
 import { useNavigate } from 'react-router-dom';
 import Userpost from './Userpost';
+import { TrendingUpTwoTone } from '@mui/icons-material';
 
 const Profile = (props) => {
   // Assuming posts is defined somewhere in your component's state or props
   const initialposts = [];
   const initialsearched = [];
   const [posts, setposts] = useState(initialposts);
+  const [Disabled,setDisabled] = useState(false)
   const [Userid, SetUserid] = useState(null);
   const [search, setsearch] = useState(initialsearched);
+  const [loading, setLoading] = useState(false);
+  const [messageBtn, setMessageBtn] = useState(false);
+  const [connectButton, setConnectButton] = useState('Connect');
+  const [color, setColor] = useState('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
+  const [textColor,setTextColor] = useState('#015B8E')
+
+
+  const RealhandleRequests = async() =>{
+    const username1 = sessionStorage.getItem('username1')
+    const response2 = await fetch('http://127.0.0.1:8000/api/chat/request/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ to_user: username1 }),
+    });
+
+    const json2 = await response2.json();
+    console.log('Request Data',json2)
+    // sessionStorage.setItem(`connectStatus_${post?.userid}`, json2.detail);
+    // console.log("REQUEST iD:",json2);
+    if(json2.detail==="accepted"){
+      setMessageBtn(true);
+    }
+    // updateColor(json2.detail);
+  }
+
+  const updateColor = (status) => {
+    // const status = sessionStorage.getItem(`connectStatus_${post?.userid}`);
+    if (status === 'pending') {
+      setColor('lightgray');
+      setTextColor('gray');
+      setDisabled(true);
+    } else if (status === 'accepted') {
+      setColor('#5bb450');
+      setTextColor('white');
+      setDisabled(true);
+    } else {
+      setColor('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
+      setTextColor('#015B8E');
+      setDisabled(false);
+    }
+  };
+
+
+
   const token = sessionStorage.getItem('token');
   const fetchallposts = async () => {
     let response = await fetch(`http://127.0.0.1:8000/api/core/any-user-post/${searched_name}`, {
@@ -31,10 +80,48 @@ const Profile = (props) => {
     });
     let json = await response.json();
     console.log('profile data', json)
-    SetUserid(json[0]?.user_id);
-    console.log("user_id:",Userid)
+    // SetUserid(json[0]?.user_id)
+    sessionStorage.setItem('user_id1',json[0]?.user_id);
+    // sessionStorage.setItem("user_id",json[0].user_id);
+    // console.log("user_id:",Userid)
     setsearch(json);
     
+  }
+
+  function capitalize(str) {
+    if (!str) return ''; 
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+
+  const handleRequests = async() =>{
+    const userid1 = sessionStorage.getItem('user_id1');
+    const response2 = await fetch( `http://127.0.0.1:8000/api/chat/RequestStatus/${userid1}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const json2 = await response2.json();
+    const detail = capitalize(json2.status);
+    // setLoading(false);
+
+    // sessionStorage.setItem(`connectStatus_${post?.userid}`, json2.detail);
+    console.log("Profile status:",json2);
+    
+    if(json2.status===null){
+      setConnectButton('Connect')
+    }
+    else{
+      setConnectButton(detail);
+    }
+    if(json2.status==="accepted"){
+      setMessageBtn(true);
+
+    }
+    updateColor(json2.status);
   }
 
   let navigate = useNavigate();
@@ -47,29 +134,37 @@ const Profile = (props) => {
     }
     fetchalldata();
     fetchallposts();
+    handleRequests();
     // console.log(search);
 
-  }, [])
+  }, [token])
 
   const clicked = async() =>{
-
+    setLoading(true);
     const emails = sessionStorage.getItem('email');
     console.log(emails);
 
-    // let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
-    //     body: JSON.stringify({
-    //         email: emails
-    //     })
-    //   });
-    //   let json = await response.json();
-      // console.log(json);
-    // props.showalert('Email has been sent', 'success');
-    sessionStorage.setItem('user_id',Userid);
-    navigate("/message")
-}
+    let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+            email: emails
+        })
+      });
+      let json = await response.json();
+      console.log(json);
+      setLoading(false)
+      RealhandleRequests();
+      handleRequests();
 
+    // props.showalert('Email has been sent', 'success');
+    // navigate("/message")
+  }
+  
+  const handleMessage = () =>{
+  sessionStorage.getItem('user_id1',);
+  navigate('/message')
+}
 
 
   return (
@@ -90,8 +185,15 @@ const Profile = (props) => {
               <h3>@{element.username}</h3>
             </li>
             <li className='connect-button'>
-              <button onClick={clicked}>Connect</button>
-            </li>
+              <button onClick={clicked} disabled={Disabled} style={{ background: color, color:textColor, fontWeight:'500' }}>
+                {loading ? "Loading..." : connectButton}
+              </button>
+            <li style={messageBtn?{display:'flex',marginLeft:'5px'}:{display:'none'}}>
+              <button onClick={handleMessage}>
+                Message
+              </button>
+              </li>
+              </li>
           </ul>
         </div>
         </div>

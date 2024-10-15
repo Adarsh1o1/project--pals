@@ -11,3 +11,79 @@
     align-items: center;
     background-color: lightgray;
 }
+
+
+
+@media screen and (min-width:850px)  and (max-width:1080px){
+
+    #post-heading{
+        font-size: 45px;
+
+     }
+     .post-subsubfirst-container ul{
+        width: 100vw;
+     }
+     .post-subsubsecond-container ul {
+        display: none;
+        /* align-items: center; */
+     }
+
+}
+
+
+@media screen and (max-width:850px){
+    .post-subsubsecond-container ul {
+        display: none;
+        /* align-items: center; */
+     }
+     #post-heading{
+        font-size: 45px;
+
+     }
+     .post-subsubfirst-container ul{
+        width: 100vw;
+     }
+     .post-subsubsecond-container ul {
+        display: none;
+        /* align-items: center; */
+     }
+
+
+}
+@media screen and (max-width:650px){
+    #post-heading{
+        font-size: 34px;
+
+     }
+     #some-text{
+        /* display: none; */
+        font-size: 15px;
+        width: 50%;
+        word-break: break-word;
+     }
+}
+
+@media screen and (max-width:400px){
+    .post-subsubsecond-container ul {
+        display: none;
+        /* align-items: center; */
+     }
+     #post-heading{
+        font-size: 28px;
+
+     }
+     .post-subsubfirst-container ul{
+        width: 100vw;
+     }
+     .post-subsubsecond-container ul {
+        display: none;
+        /* align-items: center; */
+     }
+
+     #some-text{
+        /* display: none; */
+ 
+        width: 50%;
+        word-break: break-word;
+     }
+}
