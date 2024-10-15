@@ -13,11 +13,15 @@ const Profile = (props) => {
   const [Userid, SetUserid] = useState(null);
   const [search, setsearch] = useState(initialsearched);
   const [loading, setLoading] = useState(false);
+  const [showMore, setShowmore] = useState(false);
   const [messageBtn, setMessageBtn] = useState(false);
   const [connectButton, setConnectButton] = useState('Connect');
   const [color, setColor] = useState('linear-gradient(131deg, #BBC2FF 34.90%, #52BCE9 100%)');
   const [textColor,setTextColor] = useState('#015B8E')
-
+  const userid1 = sessionStorage.getItem('user_id1');
+  const toggleShowMore = () => {
+    setShowmore(!showMore);
+  };
 
   const RealhandleRequests = async() =>{
     const username1 = sessionStorage.getItem('username1')
@@ -95,7 +99,7 @@ const Profile = (props) => {
 
 
   const handleRequests = async() =>{
-    const userid1 = sessionStorage.getItem('user_id1');
+
     const response2 = await fetch( `http://127.0.0.1:8000/api/chat/RequestStatus/${userid1}/`, {
       method: 'GET',
       headers: {
@@ -104,24 +108,27 @@ const Profile = (props) => {
       },
     });
 
-    const json2 = await response2.json();
-    const detail = capitalize(json2.status);
+    const json2 = await response2?.json();
+    const detail = capitalize(json2?.status);
     // setLoading(false);
 
     // sessionStorage.setItem(`connectStatus_${post?.userid}`, json2.detail);
     console.log("Profile status:",json2);
     
-    if(json2.status===null){
+    if(json2?.status===null){
       setConnectButton('Connect')
     }
     else{
       setConnectButton(detail);
     }
-    if(json2.status==="accepted"){
+    if(json2?.status==="accepted"){
       setMessageBtn(true);
 
     }
-    updateColor(json2.status);
+    else{
+      setMessageBtn(false);
+    }
+    updateColor(json2?.status);
   }
 
   let navigate = useNavigate();
@@ -137,11 +144,11 @@ const Profile = (props) => {
     handleRequests();
     // console.log(search);
 
-  }, [token])
+  }, [userid1,token])
 
   const clicked = async() =>{
     setLoading(true);
-    const emails = sessionStorage.getItem('email');
+    const emails = sessionStorage.getItem('emails');
     console.log(emails);
 
     let response = await fetch('http://127.0.0.1:8000/api/core/connect/', {

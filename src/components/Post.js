@@ -326,7 +326,7 @@ const Post = (props) => {
                 )}
               </div>
             </div>
-            <div className='next-prev'>                
+            <div className='next-prev' style={posts.length > 0 ?{display:'flex'}:{display:'none'}} >                
               {/* <button className='next-prev-button' onClick={PrevPageData} style={{backgroundColor:prevcolor,color:prevtextColor}} disabled={Prev}>Previous</button> */}
                 <button className='next-prev-button' style={{backgroundColor:color,color:textColor}} onClick={PageData} disabled={Next}>Load More</button>
             </div>

@@ -9,6 +9,7 @@ const Youraccount = (props) => {
   const [posts, setposts] = useState(initialposts);
   const [search, setsearch] = useState(initialsearched);
   const [form, setForm] = useState(false);
+  const [showMore, setShowmore] = useState(false);
   const [credentials, setcredentials] = useState({
     username: "",
     full_name: "",
@@ -18,6 +19,10 @@ const Youraccount = (props) => {
 
   const token = sessionStorage.getItem('token');
   const searched_name = sessionStorage.getItem('username');
+
+  const toggleShowMore = () => {
+    setShowmore(!showMore);
+  };
 
   const fetchallposts = async () => {
     let response = await fetch(`http://127.0.0.1:8000/api/core/any-user-post/${searched_name}`, {
@@ -36,7 +41,7 @@ const Youraccount = (props) => {
     let json = await response.json();
     console.log("Profile:", json);
     setsearch(json);
-    sessionStorage.setItem('your_id',json.user_id);
+    sessionStorage.setItem('your_id', json.user_id);
     setcredentials({
       username: json.username,
       full_name: json.full_name,
@@ -64,7 +69,7 @@ const Youraccount = (props) => {
       },
       body: formData // Send FormData instead of JSON
     });
-    sessionStorage.setItem('username',credentials.username);
+    sessionStorage.setItem('username', credentials.username);
     window.location.reload(); // Refresh page to reflect changes
   };
 
@@ -125,79 +130,84 @@ const Youraccount = (props) => {
         </div>
 
         <div className="profile-biodetails">
-        <h2 style={{fontSize:'20px'}}>About:</h2>
+          <h2 style={{ fontSize: '20px' }}>About:</h2>
           <div className="profile-bio">
-            {search.bio}
+            {showMore ? search?.bio : search?.bio?.substring(0, 400)}
+            {search?.bio?.length > 400 && (
+              <span className="read-more" onClick={toggleShowMore}>
+                {showMore ? " Show Less" : "... Read More"}
+              </span>
+              )}
           </div>
         </div>
-      </div>
+        </div>
 
-      <div className="profile-secondmain-container">
-        {form ? (
-          <form method="post" className='edit-form' encType="multipart/form-data" onSubmit={editprofile}>
-            <label htmlFor='Edit' id='edit-your-profile'><h1 style={{textAlign:'center'}}>Edit your profile</h1></label>
-            <br /><br />
-            <label htmlFor="fullname" className='edit-label'>Edit your name: <input
-              type="text"
-              className='ep'
-              name="full_name"
-              onChange={changed}
-              value={credentials.full_name}
-              required
-            /><br /><br /> </label>
-            
-
-            <label htmlFor="username" className='edit-label'>Edit your username:             <input
-              type="text"
-              className='ep'
-              id="edit-username"
-              value={credentials.username}
-              onChange={changed}
-              name="username"
-            /><br /><br /></label>
+        <div className="profile-secondmain-container">
+          {form ? (
+            <form method="post" className='edit-form' encType="multipart/form-data" onSubmit={editprofile}>
+              <label htmlFor='Edit' id='edit-your-profile'><h1 style={{ textAlign: 'center' }}>Edit your profile</h1></label>
+              <br /><br />
+              <label htmlFor="fullname" className='edit-label'>Edit your name: <input
+                type="text"
+                className='ep'
+                name="full_name"
+                onChange={changed}
+                value={credentials.full_name}
+                required
+              /><br /><br /> </label>
 
 
-            <label htmlFor="about" className='edit-label'>Edit your bio:           <input
-              type="text"
-              className='ep'
-              id="edit-about"
-              value={credentials.bio}
-              onChange={changed}
-              name="bio"
-              maxLength='300'
-              required
-            /><br /><br /></label>
+              <label htmlFor="username" className='edit-label'>Edit your username:             <input
+                type="text"
+                className='ep'
+                id="edit-username"
+                value={credentials.username}
+                onChange={changed}
+                name="username"
+              /><br /><br /></label>
 
 
-            <label htmlFor="imgUpload" className='edit-label'>Upload Image:             <input
-              type="file"
-              id="imgUpload"
-              name="img"
-              
-              onChange={handleFileChange}
-              accept="image/*"
-            /><br /><br /></label>
+              <label htmlFor="about" className='edit-label'>Edit your bio:           <input
+                type="text"
+                className='ep'
+                id="edit-about"
+                value={credentials.bio}
+                onChange={changed}
+                name="bio"
+                // maxLength='300'
+                required
+              /><br /><br /></label>
 
-            <div className='submit-cancel'>
-            <input type="submit" className='edit-submit' value="Submit Form" />
-            <button type="button" className='edit-submit' onClick={second_clicked}>Cancel</button>
+
+              <label htmlFor="imgUpload" className='edit-label'>Upload Image:             <input
+                type="file"
+                id="imgUpload"
+                name="img"
+
+                onChange={handleFileChange}
+                accept="image/*"
+              /><br /><br /></label>
+
+              <div className='submit-cancel'>
+                <input type="submit" className='edit-submit' value="Submit Form" />
+                <button type="button" className='edit-submit' onClick={second_clicked}>Cancel</button>
+              </div>
+
+            </form>
+          ) : (
+            <div className="all-posts">
+              {Array.isArray(posts) && posts.length > 0 ? (
+                posts.map((element) => (
+                  <Userpost key={element.id} post={element} />
+                ))
+              ) : (
+                <p>No posts available</p>
+              )}
             </div>
-            
-          </form>
-        ) : (
-          <div className="all-posts">
-            {Array.isArray(posts) && posts.length > 0 ? (
-              posts.map((element) => (
-                <Userpost key={element.id} post={element} />
-              ))
-            ) : (
-              <p>No posts available</p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
-  );
+      );
 }
 
-export default Youraccount;
+      export default Youraccount;

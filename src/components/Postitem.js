@@ -106,6 +106,7 @@ const Postitem = ({ post, showalert }) => {
     // sessionStorage.setItem('username1', username1);
     sessionStorage.setItem('emails', emails);
     sessionStorage.setItem('username1', username1);
+    
     navigate('/user-profile')
 
     // try {
@@ -139,7 +140,7 @@ const Postitem = ({ post, showalert }) => {
           <ul>
             <li id='name'>
               <div className='post-username' onClick={handleUsernameClick}>@{post?.username}</div>
-              <div id='post_time'>  {post?.time_since_posted} ago</div>
+              <div id='post_time'>  {post?.time_since_posted}</div>
             </li>
             <li className='connect-button'>
               <button onClick={clicked}>
