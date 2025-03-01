@@ -54,12 +54,12 @@ const CreatePost = () =>{
                   <li>
                     <input type="text" className='ep' id='Category' value={credentials.category} onChange={changed} name="category" maxLength={60} />
                   </li>
-                  <li>
+                  {/* <li>
                     <label htmlFor="Validation">Post validity (in days):</label>
                   </li>
                   <li>
-                    <input type="number" className='ep' name="post-validation" id='post-validation' />
-                  </li>
+                    <input type="number" className='ep' name="post-validation" id='post-validation' onChange={changed} />
+                  </li> */}
                   <li>
                     <label htmlFor="Description">Write about your post:</label>
                   </li>
