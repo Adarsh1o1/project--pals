@@ -334,7 +334,6 @@ const Post = (props) => {
         </div>
       </div>
 
-      {/* Create Post Section */}
 
     </div>
   );

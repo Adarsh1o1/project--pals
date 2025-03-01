@@ -11,6 +11,7 @@ const Navbar = () => {
     const [searchTerm, setSearchTerm] = useState(sessionStorage.getItem('category') || '');
     const [Result, setResult] = useState(sessionStorage.getItem('Result') === 'true'); // Retrieve Result state
     const [notification, setNotification] = useState(false); // Retrieve Result state
+    const [navbar_x, setNavbar_x] = useState(false); // Add state for navbar_x
 
     const token = sessionStorage.getItem('token');
 
@@ -29,17 +30,16 @@ const Navbar = () => {
             setResult(true);
             window.location.reload();
         }
-
         else {
             // Optionally, you could provide some feedback to the user here
             console.log("Search term is empty. Cannot perform search.");
         }
         if (location.pathname !== '/post') {
-            navigate('/post')
+            navigate('/post');
             window.location.reload();
         }
-
     };
+
     const handleClick2 = () => {
         sessionStorage.removeItem('category');
         setSearchTerm(''); // Clear the search input
@@ -51,13 +51,18 @@ const Navbar = () => {
         sessionStorage.clear();
         navigate('/');
     };
+
     const handleNotifications = () => {
         const newNotificationState = !notification; // Toggle the notification state
         setNotification(newNotificationState);
         sessionStorage.setItem("notification", newNotificationState); // Update sessionStorage after state change
         window.location.reload(); // This will cause the Post component to re-render with the new state
-    }
+    };
 
+    // Example of toggling navbar_x
+    const toggleNavbarX = () => {
+        setNavbar_x(!navbar_x); // Toggle the state of navbar_x
+    };
 
     return (
         <div className='nav-main-container' style={location.pathname === '/' || location.pathname === '/paartnup' || location.pathname === '/post' || location.pathname === '/user-profile' || location.pathname === '/your-profile' || location.pathname === '/create-post' ? style : { display: 'none' }}>
@@ -68,7 +73,7 @@ const Navbar = () => {
                         Project Pals
                     </li>
                     <li>
-                        <div className="nav-search">
+                        <div className="nav-search" style={token ? { width: '400px' } : { width: '600px' }}>
                             <input
                                 type="text"
                                 id='search-input'
@@ -80,6 +85,7 @@ const Navbar = () => {
                                     }
                                 }}
                                 onChange={handleSearch}
+                                disabled={navbar_x} // Disable input if navbar_x is true
                             />
                             <img
                                 src={searchbtn}
@@ -101,16 +107,13 @@ const Navbar = () => {
                         </div>
                     </li>
                     <li></li>
-                    <li className='nav-list' onClick={handleNotifications}>
+                    <li className='nav-list' onClick={handleNotifications} style={token ? { display: 'flex' } : { display: 'none' }}>
                         Notifications
                     </li>
-                    {/* <li className='nav-list'>
-                        <Link to={'/aboutus'}>About us</Link>
-                    </li> */}
-                    <li className='nav-list'>
+                    <li className='nav-list' style={token ? { display: 'flex' } : { display: 'none' }}>
                         <Link to={'/post'}>Posts</Link>
                     </li>
-                    <li className='nav-list'>
+                    <li className='nav-list' style={token ? { display: 'flex' } : { display: 'none' }}>
                         <Link to={'/message'}>Messages</Link>
                     </li>
                     <li id='options'>

@@ -139,7 +139,7 @@ const Postitem = ({ post, showalert }) => {
         <div className="postitem-subfirst-container">
           <ul>
             <li id='name'>
-              <div className='post-username' onClick={handleUsernameClick}>@{post?.username}</div>
+              <div className='post-username' onClick={handleUsernameClick} style={{display:"flex"}}><div className='circle'><img src={`http://127.0.0.1:8000/${post?.image}`}/></div>{post?.username}</div>
               <div id='post_time'>  {post?.time_since_posted}</div>
             </li>
             <li className='connect-button'>

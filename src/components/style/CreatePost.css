@@ -1,0 +1,20 @@
+.createpost-main-container{
+    width:75vw;
+    align-items: center;
+    text-align: left;
+    justify-content: space-between;
+}
+
+#getpost-heading{
+    font-size: 50px;
+}
+#getidea-heading{
+    font-size: 20px;
+}
+
+.createpost-heading-container{
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    flex-direction: column;
+}

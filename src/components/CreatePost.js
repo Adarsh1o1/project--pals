@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
+import './style/CreatePost.css'
+import idea from './style/Idea_concept.jpg'
 const CreatePost = () =>{
     const [credentials, setCredentials] = useState({ title: '', category: '', description: '' });
     const token = sessionStorage.getItem('token');
@@ -29,7 +30,13 @@ const CreatePost = () =>{
         setCredentials({ title: '', category: '', description: '' });
       }
     return(
-        
+      <div className="createpost-main-container" style={{display:'flex'}}>
+        <div className="createpost-heading-container">
+          <h1 id="getpost-heading">Tell us What you need </h1>
+          <h1 id="getpost-heading"style={{color:'#015B8E'}}>Today.</h1>
+          <p id="getidea-heading">Got some idea? Find the best team to team up now!!</p>
+          <img src={idea} style={{width:'400px',translate:'40px'}} alt="a png that shows idea connection" />
+        </div>
             <div className="post-second-container">
             <label htmlFor="Create Post" id='create-post'>Create Post</label>
             <div className="createpost-first-container">
@@ -66,7 +73,7 @@ const CreatePost = () =>{
               <button onClick={postData}>Create Post</button>
             </div>
           </div>
-        
+          </div>
     );
 }
 

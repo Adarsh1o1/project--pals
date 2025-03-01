@@ -20,7 +20,7 @@ const Signup = () => {
   }
   const [currentChild, setCurrentChild] = useState(1);
   const handleNext = () => {
-    setCurrentChild((prevChild) => (prevChild < 3 ? prevChild + 1 : 3));
+    setCurrentChild((prevChild) => (prevChild < 2 ? prevChild + 1 : 2));
   }
 
   const handleBack = () => {
@@ -52,11 +52,13 @@ const Signup = () => {
         </div>
 
         <div className="content">
-          {currentChild === 1 && <Studentcollege onNext={step1} onNext2={step2} />}
+          {/* {currentChild === 1 && <Studentcollege onNext={step1} onNext2={step2} />}
           {currentChild === 2 &&
             (show ? (<Form onNext={handleNext} onBack={handleBack} />) : (<College onNext={handleNext} onBack={handleBack} />))
-          }
-          {currentChild===3 && <Otp onBack={handleBack}/>}
+          } */}
+          
+          {currentChild ===  1 && <Form onNext={handleNext} onBack={handleBack} />}
+          {currentChild=== 2 && <Otp onBack={handleBack}/>}
           {/* <button onNext={handleNext}>student</button>
           <button onClick={toggled}>college</button> */}
           {/* {show?<Form onSubmit={toggled}/>:<Otp onSubmit={toggled}/>} */}

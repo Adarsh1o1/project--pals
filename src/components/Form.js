@@ -81,8 +81,9 @@ const Form = (props) => {
                     <input type="password" name='password'  className="password" onChange={changed} placeholder='Password' />
                     <input type="password" name='password2' className="confirmpassword" onChange={changed} placeholder='Confirm Password' />
                     <div className="form-submit-button">
-                    <button type="submit" disabled={checked()} className="form-submit">Next</button>
                     <button className="form-submit" onClick={handleClick}>Back</button>
+                    <button type="submit" disabled={checked()} className="form-submit">Next</button>
+ 
                     </div>
                     <div className="refer">
                         <Link id='refer' to="/login">

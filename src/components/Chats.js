@@ -5,12 +5,14 @@ import Picker from '@emoji-mart/react';
 import Message from "./Message";
 import ReactScrollToBottom from 'react-scroll-to-bottom';
 import sendButton from './style/send_24dp_434343_FILL0_wght400_GRAD0_opsz24.png'
+import { useNavigate } from "react-router-dom";
 
 const Chats = () => {
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const initialsearched = [];
+  const navigate = useNavigate();
   const inputRef = useRef(null);
   const emojiSelectorRef = useRef(null);
   const chatSocket = useRef(null);
@@ -152,6 +154,13 @@ const Chats = () => {
   };
 
   useKeyPress('Enter', sendMessage);
+
+    useEffect(() => {
+      if (!token) {
+        return navigate('/login');
+      }
+
+    }, [token]);
 
   return (
     <div className="chats">

@@ -149,7 +149,7 @@ const Youraccount = (props) => {
               <br /><br />
               <label htmlFor="fullname" className='edit-label'>Edit your name: <input
                 type="text"
-                className='ep'
+                className='epi'
                 name="full_name"
                 onChange={changed}
                 value={credentials.full_name}
@@ -159,7 +159,7 @@ const Youraccount = (props) => {
 
               <label htmlFor="username" className='edit-label'>Edit your username:             <input
                 type="text"
-                className='ep'
+                className='epi'
                 id="edit-username"
                 value={credentials.username}
                 onChange={changed}
@@ -169,7 +169,7 @@ const Youraccount = (props) => {
 
               <label htmlFor="about" className='edit-label'>Edit your bio:           <input
                 type="text"
-                className='ep'
+                className='epi'
                 id="edit-about"
                 value={credentials.bio}
                 onChange={changed}
