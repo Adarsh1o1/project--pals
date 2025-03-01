@@ -3,7 +3,6 @@ import  './style/Alert.css'
 
 
 const Alert = (props) => {
-
     return (
         <div className='alert-main-container'>
             {props.alert && <div className="alert-first-container">

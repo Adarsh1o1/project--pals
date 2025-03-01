@@ -45,6 +45,7 @@ const Messanger = () => {
 
   return (
     <div className='chats'>
+      {/* msger */}
         <div className="messanger-main-container">
         <div className="messanger-heading">
         <div className="arrow-back"><img style={{width:'35px'}} onClick={handleBack} src={arrowBack}/></div>

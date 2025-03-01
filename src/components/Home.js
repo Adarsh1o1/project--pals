@@ -5,7 +5,7 @@ import idea from './style/home-page-idea1.png.jpg'
 const Home = () => {
   const token = sessionStorage.getItem('token');
   return (
-    
+    // home page
     <>
     <br />
     <br />

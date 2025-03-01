@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Token } from '@mui/icons-material';
 
 const Otp = (props) => {
+  // otp
   let navigate = useNavigate();
   const token = sessionStorage.getItem('token')
   const [check, setcheck] = useState(true)

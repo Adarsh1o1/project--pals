@@ -14,6 +14,7 @@ const Postitem = ({ post, showalert }) => {
   // const [requestId,setRequestId] = useState(0)
   
   function capitalize(str) {
+    // capitalize
     if (!str) return ''; 
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }

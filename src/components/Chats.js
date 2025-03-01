@@ -187,6 +187,7 @@ const Chats = () => {
             {/* </div> */}
           </ReactScrollToBottom>
           <div className="chat-input">
+            {/* button */}
             <button className="emoji-button" style={{background:'none',border:'none',outline:'none',fontSize:'28px',cursor:'pointer'}} onClick={toggleEmojiPicker}>🗿</button>
             <textarea className="input-text" rows={1} columns={50} onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." ></textarea>
             {/* <input className="input-text" onChange={handleInputChange} ref={inputRef} value={message} name='chat-input' placeholder="Type your message..." type="text" /> */}

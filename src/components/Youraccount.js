@@ -108,6 +108,8 @@ const Youraccount = (props) => {
   };
 
   return (
+
+    // our account
     <div className='profile-main-container'>
       <div className="profile-first-container" key={search.id}>
         <div className='image-name'>

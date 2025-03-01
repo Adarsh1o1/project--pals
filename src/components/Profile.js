@@ -177,6 +177,7 @@ const Profile = (props) => {
   return (
     
     <div className='profile-main-container'>
+      {/* profile */}
       {Array.isArray(search) ? (search.map((element)=>(
       <div className="profile-first-container" key={element.id}>
         <div className='image-name'>

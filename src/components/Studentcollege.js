@@ -6,7 +6,7 @@ import imstudent from './style/student.jpg'
 
 const Studentcollege = ({ onNext, onNext2 }) => {
   return (<>
-
+      {/* student college */}
     <div className='stdclg-main-container'>
     <label htmlFor="signup" id='signupas'>Signup as</label>
     <div className="stdclg-secondmain-container">

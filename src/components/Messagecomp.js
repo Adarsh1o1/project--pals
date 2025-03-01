@@ -9,6 +9,7 @@ const Messagecomp = ({recentChats,key,user_id,image,last_message,last_updated}) 
   }
 
   return (
+    // msgcom
     <div>
       <div className="messagecomp-container">
         <div className='circle'><img src={image}/></div>

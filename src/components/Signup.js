@@ -15,6 +15,7 @@ const Signup = () => {
   // const toggled = () =>{
   //   setshow(!show);
   // }
+  // signup
   const toggled = () => {
     setshow(!show);
   }

@@ -18,6 +18,7 @@ const Chatapp = () => {
     //   </Link>
     // </div>
     <div className="chat-container">
+      
       <Messanger/>
       <Chats/>
     </div> 

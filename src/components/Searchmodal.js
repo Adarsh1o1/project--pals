@@ -19,7 +19,7 @@
 //       navigate('/user-profile');
 //     }
 //   };
-
+// searchmodal
 
 //   return(
 //   <div className="modal" style={ props.modalResult ? style: {display:'none'}} onClick={handleUsernameClick}>

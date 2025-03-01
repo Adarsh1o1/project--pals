@@ -19,6 +19,7 @@ const Message = ({ message, position, time, date }) => {
   const messageLines = breakMessageIntoLines(message);
 
   return (
+    // messages
     <>
       <div
         className={`message-box ${position}`}

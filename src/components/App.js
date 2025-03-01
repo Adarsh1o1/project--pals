@@ -121,7 +121,6 @@ function App() {
       />
 
       <Routes>
-        
         <Route path='*' element={<Error />} />
         <Route path='/aboutus' element={<About />} />
         <Route path='/paartnup' element={<Home />} />
