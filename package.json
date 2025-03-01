@@ -27,7 +27,8 @@
     "socket.io-client": "^4.7.4",
     "web-vitals": "^2.1.4",
     "websocket": "^1.0.34"
-  },
+  }
+  ,
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
