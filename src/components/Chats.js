@@ -20,6 +20,7 @@ const Chats = () => {
   const searched_name = sessionStorage.getItem('username1');
   const token = sessionStorage.getItem('token');
   const username = sessionStorage.getItem('username');
+  const message_type = "text"
   let user_id = sessionStorage.getItem('user_id');
   let your_id = sessionStorage.getItem('your_id');
 
@@ -127,7 +128,7 @@ const Chats = () => {
   const sendMessage = (e) => {
     if (message === "" || message === null) return;
     if (chatSocket.current && chatSocket.current.readyState === WebSocket.OPEN) {
-      chatSocket.current.send(JSON.stringify({ message, username }));
+      chatSocket.current.send(JSON.stringify({ message, username, message_type }));
       setMessage('');
     } else {
       console.error('WebSocket is not open.');
